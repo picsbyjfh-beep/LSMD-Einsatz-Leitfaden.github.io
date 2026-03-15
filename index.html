@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LSMD | Einsatz-Leitfaden</title>
+    <style>
+        :root { --lsmd-red: #c0392b; --dark-bg: #121212; --card-bg: #1e1e1e; --text: #e0e0e0; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--dark-bg); color: var(--text); padding: 20px; display: flex; justify-content: center; }
+        .container { max-width: 800px; width: 100%; }
+        h1 { color: var(--lsmd-red); text-align: center; text-transform: uppercase; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 20px; font-size: 0.9em; }
+        
+        .search-box { width: 100%; padding: 15px; background: #252525; border: 1px solid var(--lsmd-red); border-radius: 8px; color: white; font-size: 16px; margin-bottom: 20px; box-sizing: border-box; outline: none; }
+        
+        .guide-card { background: var(--card-bg); border-radius: 8px; margin-bottom: 15px; border: 1px solid #333; display: none; overflow: hidden; }
+        .guide-header { background: #252525; padding: 15px 20px; font-weight: bold; color: var(--lsmd-red); border-bottom: 1px solid #333; display: flex; justify-content: space-between; }
+        .guide-body { padding: 20px; line-height: 1.6; }
+        
+        .step { margin-bottom: 10px; display: flex; align-items: flex-start; }
+        .step-num { background: var(--lsmd-red); color: white; min-width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 0.8em; font-weight: bold; margin-top: 2px; }
+        
+        .med-tag { background: #2c3e50; color: #3498db; padding: 2px 8px; border-radius: 4px; font-size: 0.85em; font-weight: bold; border: 1px solid #3498db; margin-right: 5px; }
+        .anim-tag { background: #273c2a; color: #2ecc71; padding: 2px 8px; border-radius: 4px; font-size: 0.85em; font-weight: bold; border: 1px solid #2ecc71; }
+        
+        .tag-container { margin-top: 15px; padding-top: 15px; border-top: 1px solid #333; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>LSMD Medical Guide</h1>
+    <p class="subtitle">Schnellsuche für Behandlungsabläufe & Medikation</p>
+
+    <input type="text" id="search" class="search-box" placeholder="Symptom oder Verletzung suchen (z.B. Schuss, Sturz, Bewusstlos)..." onkeyup="searchGuide()">
+
+    <div id="guide-container">
+        <!-- Inhalte werden per JS geladen -->
+    </div>
+</div>
+
+<script>
+    const medicalData = [
+        {
+            title: "Schussverletzung (Oberkörper)",
+            keywords: "schuss waffe projektil blutung",
+            steps: [
+                "Einsatzstelle absichern (Eigenschutz!)",
+                "Patient stabilisieren & Bewusstsein prüfen",
+                "Wunde freilegen & Druckverband anlegen",
+                "Kugeleintritt desinfizieren",
+                "Ggf. Schocklagerung einleiten"
+            ],
+            meds: ["Schmerzmittel", "Desinfektionsspray"],
+            anim: "/me versorgt die Schusswunde"
+        },
+        {
+            title: "Bewusstlose Person (Code A)",
+            keywords: "bewusstlos ohnmacht stabil stabilisierung",
+            steps: [
+                "Vitalfunktionen prüfen (Puls/Atmung)",
+                "Stabile Seitenlage herstellen",
+                "Sauerstoffmaske anlegen",
+                "Riechsalz verwenden zur Aufweckung",
+                "Transport ins Krankenhaus vorbereiten"
+            ],
+            meds: ["Riechsalz", "Sauerstoff"],
+            anim: "/me prüft den Puls am Hals"
+        },
+        {
+            title: "Knochenbruch (Bein/Arm)",
+            keywords: "bruch bein arm sturz unfall schiene",
+            steps: [
+                "Betroffene Stelle ruhigstellen",
+                "Schienung des betroffenen Körperteils",
+                "Kühlpack auflegen gegen Schwellung",
+                "Starke Schmerzmittel verabreichen",
+                "Patient darf nicht selbstständig laufen"
+            ],
+            meds: ["Schmerzmittel (stark)", "Kühlpack"],
+            anim: "/me legt eine Schiene an"
+        },
+        {
+            title: "Brandverletzung",
+            keywords: "feuer brennen verbrennung hitze",
+            steps: [
+                "Brandquelle entfernen / Kleidung vorsichtig lösen",
+                "Wunde vorsichtig mit Wasser kühlen (kein Eis!)",
+                "Brandsalbe dünn auftragen",
+                "Sterilen Verband locker anlegen",
+                "Flüssigkeitszufuhr (oral/infusion)"
+            ],
+            meds: ["Brandsalbe", "Infusion"],
+            anim: "/me kühlt die Verbrennung"
+        }
+    ];
+
+    function init() {
+        const container = document.getElementById('guide-container');
+        medicalData.forEach((item, index) => {
+            let stepsHtml = item.steps.map((s, i) => `
+                <div class="step">
+                    <div class="step-num">${i+1}</div>
+                    <div>${s}</div>
+                </div>`).join('');
+                
+            let medsHtml = item.meds.map(m => `<span class="med-tag">${m}</span>`).join('');
+
+            container.innerHTML += `
+                <div class="guide-card" id="card-${index}" data-keywords="${item.keywords} ${item.title.toLowerCase()}">
+                    <div class="guide-header">
+                        <span>${item.title}</span>
+                    </div>
+                    <div class="guide-body">
+                        ${stepsHtml}
+                        <div class="tag-container">
+                            ${medsHtml}
+                            <span class="anim-tag">${item.anim}</span>
+                        </div>
+                    </div>
+                </div>`;
+        });
+    }
+
+    function searchGuide() {
+        let input = document.getElementById('search').value.toLowerCase();
+        let cards = document.getElementsByClassName('guide-card');
+        
+        if(input.length < 2) {
+            Array.from(cards).forEach(c => c.style.display = "none");
+            return;
+        }
+
+        Array.from(cards).forEach(card => {
+            let keywords = card.getAttribute('data-keywords');
+            if (keywords.includes(input)) {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    }
+
+    init();
+</script>
+
+</body>
+</html>
