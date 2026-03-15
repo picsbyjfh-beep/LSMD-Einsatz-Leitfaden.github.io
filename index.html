@@ -3,193 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LSMD | Professional Medical Database</title>
+    <title>LSMD | Global Medical Encyclopedia</title>
     <style>
         :root {
-            --lsmd-red: #c0392b;
-            --surgery-blue: #2980b9;
-            --psych-purple: #8e44ad;
-            --dark-bg: #0f0f0f;
-            --card-bg: #1a1a1a;
-            --text: #e0e0e0;
+            --lsmd-red: #c0392b; --surgery-blue: #2980b9; --psych-purple: #8e44ad;
+            --dark-bg: #0a0a0a; --card-bg: #161616; --text: #f0f0f0;
         }
-
-        body { font-family: 'Segoe UI', sans-serif; background: var(--dark-bg); color: var(--text); margin: 0; padding: 20px; }
-        .container { max-width: 1100px; margin: auto; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--dark-bg); color: var(--text); margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: auto; }
         
-        .header { text-align: center; border-bottom: 2px solid var(--lsmd-red); padding-bottom: 20px; margin-bottom: 30px; }
-        h1 { margin: 0; letter-spacing: 3px; color: var(--lsmd-red); text-transform: uppercase; }
-
-        .search-container { position: sticky; top: 10px; z-index: 1000; background: var(--dark-bg); padding: 10px 0; }
-        .search-box { width: 100%; padding: 18px; background: #222; border: 1px solid #444; border-radius: 10px; color: white; font-size: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        .search-box:focus { border-color: var(--lsmd-red); outline: none; }
-
-        .filter-btns { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; }
-        .filter-btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; background: #333; color: white; transition: 0.3s; }
-        .filter-btn.active[data-type="all"] { background: #555; }
-        .filter-btn.active[data-type="emergency"] { background: var(--lsmd-red); }
-        .filter-btn.active[data-type="surgery"] { background: var(--surgery-blue); }
-        .filter-btn.active[data-type="psych"] { background: var(--psych-purple); }
-
-        .guide-card { background: var(--card-bg); border-radius: 12px; margin-bottom: 25px; overflow: hidden; border: 1px solid #333; display: none; transition: 0.3s; }
-        .card-header { padding: 15px 25px; font-size: 1.3em; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        /* Header & Navigation */
+        .header { text-align: center; border-bottom: 2px solid var(--lsmd-red); padding-bottom: 20px; margin-bottom: 20px; }
+        .search-container { position: sticky; top: 0; background: var(--dark-bg); padding: 15px 0; z-index: 100; border-bottom: 1px solid #333; }
+        .search-box { width: 100%; padding: 15px; background: #222; border: 1px solid #444; border-radius: 8px; color: white; font-size: 18px; }
         
-        /* Fachbereich-Farben */
-        .emergency .card-header { background: #351414; color: #ff6b6b; border-bottom: 3px solid var(--lsmd-red); }
-        .surgery .card-header { background: #142535; color: #5dade2; border-bottom: 3px solid var(--surgery-blue); }
-        .psych .card-header { background: #251435; color: #bb8fce; border-bottom: 3px solid var(--psych-purple); }
+        .filter-group { display: flex; gap: 10px; margin-top: 15px; justify-content: center; flex-wrap: wrap; }
+        .filter-btn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; background: #333; color: #ccc; transition: 0.3s; }
+        .filter-btn.active { background: var(--lsmd-red); color: white; }
 
-        .card-body { padding: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        @media (max-width: 800px) { .card-body { grid-template-columns: 1fr; } }
-
-        .section-title { font-size: 0.9em; text-transform: uppercase; color: #888; margin-bottom: 10px; font-weight: bold; display: block; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        /* Card System */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; margin-top: 20px; }
+        .card { background: var(--card-bg); border-radius: 10px; border: 1px solid #222; display: flex; flex-direction: column; overflow: hidden; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-3px); border-color: #444; }
         
-        .rp-box { background: #000; color: #00ff41; padding: 15px; border-radius: 5px; font-family: 'Courier New', monospace; font-size: 0.9em; border-left: 4px solid #00ff41; }
-        ul { padding-left: 20px; margin: 0; }
-        li { margin-bottom: 8px; }
+        .card-header { padding: 15px; font-weight: bold; font-size: 1.1em; border-bottom: 2px solid transparent; }
+        .EMERGENCY .card-header { border-color: var(--lsmd-red); color: #ff7675; }
+        .SURGERY .card-header { border-color: var(--surgery-blue); color: #74b9ff; }
+        .PSYCH .card-header { border-color: var(--psych-purple); color: #a29bfe; }
 
-        .med-info { background: #222; padding: 15px; border-radius: 8px; border: 1px solid #444; }
-        .mg-tag { color: #ffcc00; font-weight: bold; }
+        .card-content { padding: 15px; flex-grow: 1; font-size: 0.95em; }
+        .label { color: #888; font-size: 0.8em; text-transform: uppercase; display: block; margin-top: 10px; border-bottom: 1px solid #333; }
+        
+        .rp-box { background: #000; color: #00b894; padding: 10px; border-radius: 4px; font-family: monospace; margin-top: 10px; border-left: 3px solid #00b894; }
+        .med-tag { color: #fdcb6e; font-weight: bold; }
+        
+        ul { padding-left: 18px; margin: 5px 0; }
+        li { margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1>LSMD | Medical Knowledge Base</h1>
-        <p>Zentrales Informationssystem für den medizinischen Dienst</p>
+        <h1>LSMD ENZYKLOPÄDIE</h1>
+        <small>Zentrales Archiv für medizinische Verfahren & Psychotherapie</small>
     </div>
 
     <div class="search-container">
-        <input type="text" id="search" class="search-box" placeholder="Suchen nach Verletzung, Abteilung oder Symptom..." onkeyup="filter()">
-        <div class="filter-btns">
-            <button class="filter-btn active" data-type="all" onclick="setFilter('all')">Alle Bereiche</button>
-            <button class="filter-btn" data-type="emergency" onclick="setFilter('emergency')">Notdienst</button>
-            <button class="filter-btn" data-type="surgery" onclick="setFilter('surgery')">Chirurgie</button>
-            <button class="filter-btn" data-type="psych" onclick="setFilter('psych')">Psychotherapie</button>
+        <input type="text" id="search" class="search-box" placeholder="Suche (z.B. Schuss, Psychose, Beinbruch, ID: 102)..." onkeyup="render()">
+        <div class="filter-group">
+            <button class="filter-btn active" onclick="setFilter('ALL', this)">Alle</button>
+            <button class="filter-btn" onclick="setFilter('EMERGENCY', this)">Notaufnahme</button>
+            <button class="filter-btn" onclick="setFilter('SURGERY', this)">Chirurgie</button>
+            <button class="filter-btn" onclick="setFilter('PSYCH', this)">Psychotherapie</button>
         </div>
     </div>
 
-    <div id="guide-list"></div>
+    <div id="grid" class="grid"></div>
 </div>
 
 <script>
+    // DATENBANK - Hier kannst du JEDES Szenario hinzufügen
     const database = [
-        // --- NOTDIENST ---
-        {
-            id: "E1", title: "Offene Fraktur (Bein/Arm)", type: "emergency",
-            keywords: "bruch knochen splitter blutung unfall",
-            steps: ["Wundreinigung mit Ringerlösung","Blutstillung (Druckverband oberhalb)","Ruhigstellung mit Vakuum-Schiene","Schmerzmittelgabe nach Anweisung"],
-            meds: "Analgetika (nach ärztlicher Verordnung)",
-            rp: "/me tastet vorsichtig die Bruchstelle ab\n/me desinfiziert die Wunde weitläufig\n/me fixiert die Schiene mit Klettverschlüssen",
-            note: "Patient darf Extremität keinesfalls belasten. Infektionsgefahr!"
-        },
-        {
-            id: "E2", title: "Herzinfarkt (Myokardinfarkt)", type: "emergency",
-            keywords: "herz brust schmerz atemnot",
-            steps: ["Oberkörper hochlagern","Sauerstoffzufuhr (6-10L/Min)","EKG-Monitoring","Nitrospray & Blutverdünner"],
-            meds: "Nitroglycerin & Thrombozytenaggregationshemmer (nach Protokoll)",
-            rp: "/me öffnet die Kleidung am Oberkörper\n/me klebt EKG-Elektroden auf\n/me reicht dem Patienten das Spray",
-            note: "Absolute Ruhe bewahren. Stress für Patienten lebensgefährlich."
-        },
+        // --- NOTAUFNAHME ---
+        { id: 101, type: "EMERGENCY", title: "Schwerer Autounfall (Polytrauma)", tags: "unfall crash polytrauma trauma",
+          steps: ["Vitals (Puls, Atmung, RR) prüfen", "HWS-Schiene (Stiffneck) anlegen", "Vakuummatratze für Stabilisierung", "Infusion (Ringer) legen"],
+          meds: "Analgetika (nach Protokoll)", rp: "/me prüft Pupillenreaktion\n/do Patient ist ansprechbar, klagt über Rückenschmerz",
+          note: "Bei Verdacht auf Wirbelsäulenverletzung: Spineboard nutzen!" },
+        
+        { id: 102, type: "EMERGENCY", title: "Offene Fraktur (Unterschenkel)", tags: "bruch bein knochen blutung",
+          steps: ["Blutstillung (Druckverband)", "Wundsäuberung mit NaCl", "Ruhigstellung mit Luftkammer-Schiene", "Abdeckung mit sterilem Tuch"],
+          meds: "Schmerzmittel (nach ärztlicher Anordnung)", rp: "/me fixiert die Beinschiene\n/me desinfiziert die Wundränder",
+          note: "Gefahr eines Fettembolie-Syndroms bei großen Röhrenknochen." },
 
         // --- CHIRURGIE ---
-        {
-            id: "C1", title: "Projektilextraktion (OP)", type: "surgery",
-            keywords: "schuss op chirurgie kugel blutung skalpell",
-            steps: ["Vollnarkose einleiten","Schnittführung mit Skalpell","Blutgefäße veröden (Kauter)","Projektil mit Kornzange bergen","Mehrschichtige Naht"],
-            meds: "Anästhetika, Antibiotika",
-            rp: "/me setzt das Skalpell an und schneidet\n/me tupft austretendes Blut ab\n/me zieht das Projektil aus dem Gewebe\n/me setzt die Hautnaht (Einzelknopfnaht)",
-            note: "OP-Dauer ca. 45-60 Min. Danach Bettruhe."
-        },
-        {
-            id: "C2", title: "Innere Blutungen (Milz/Leber)", type: "surgery",
-            keywords: "unfall bauch innerlich op blut",
-            steps: ["Laparotomie (Bauchöffnung)","Absaugen des Blutes","Lokalisierung der Blutungsquelle","Clip oder Naht am Gefäß","Drainage legen"],
-            meds: "Gerinnungsfördernde Mittel",
-            rp: "/me führt den Sauger in den Bauchraum ein\n/me setzt eine Klemme auf das Gefäß\n/me spült den Bauchraum mit Kochsalzlösung",
-            note: "Extrem zeitkritisch! Schockgefahr."
-        },
+        { id: 201, type: "SURGERY", title: "Milzruptur (Milz-OP)", tags: "milz innerlich blutung op",
+          steps: ["Laparotomie (Bauchschnitt)", "Absaugen des Blutes (Zellsaver)", "Abklemmung der Milzarterie", "Splenektomie (Milzentfernung)"],
+          meds: "Vollnarkose, Breitbandantibiotikum", rp: "/me führt den Skalpellschnitt durch\n/me setzt die Gefäßklemmen an",
+          note: "Patient benötigt post-operativ Impfschutz, da Milz fehlt!" },
+
+        { id: 202, type: "SURGERY", title: "Epiduralhämatom (Hirn-OP)", tags: "kopf hirn blutung schädel op",
+          steps: ["Kraniotomie (Schädelöffnung)", "Entfernung des Blutgerinnsels", "Blutstillung der Arteria meningea", "Rückfixierung des Knochendeckels"],
+          meds: "Antioödematöse Mittel", rp: "/me setzt den Bohrer an den Schädel an\n/me entlastet den Druck im Gehirn",
+          note: "Extremer Zeitdruck – Pupillendifferenz beachten!" },
 
         // --- PSYCHOTHERAPIE ---
-        {
-            id: "P1", title: "Panikattacke (Akut)", type: "psych",
-            keywords: "angst panik atem psychotherapie",
-            steps: ["Patient aus Gefahrenzone bringen","Atemtechnik anleiten","Reize minimieren (Licht/Lärm)","Grounding-Technik (5 Dinge sehen...)"],
-            meds: "Anxiolytika (bei Bedarf)",
-            rp: "/me spricht mit ruhiger, tiefer Stimme\n/me hält Blickkontakt zum Patienten\n/me demonstriert die richtige Atmung",
-            note: "Niemals sagen 'Beruhigen Sie sich einfach'. Verständnis zeigen."
-        },
-        {
-            id: "P2", title: "Schwere Depression / Suizidalität", type: "psych",
-            keywords: "traurig tod suizid psychose therapie",
-            steps: ["Vertrauensbasis aufbauen","Krisenplan erstellen","Gefährdungseinschätzung","Einweisung in geschlossene Abteilung?"],
-            meds: "Antidepressiva (nach Verschreibung)",
-            rp: "/me hört aktiv zu und macht sich Notizen\n/me stellt offene Fragen zur Gefühlswelt\n/me bietet ein Glas Wasser und Taschentücher an",
-            note: "Keine Vorwürfe machen. Patient ernst nehmen."
-        }
+        { id: 301, type: "PSYCH", title: "Paranoide Schizophrenie (Akutschub)", tags: "psychose stimmen wahn angst",
+          steps: ["Reizabschirmung (ruhiger Raum)", "Validation (Wahn nicht ausreden, aber nicht bestätigen)", "Suizid-Check", "Gefährdungsbeurteilung"],
+          meds: "Sedierung (nach Protokoll)", rp: "/me hält respektvollen Abstand\n/me spricht ruhig und sachlich mit dem Patienten",
+          note: "Niemals von hinten an den Patienten herantreten." },
+
+        { id: 302, type: "PSYCH", title: "Narzisstische Persönlichkeitsstörung", tags: "ego narzissmus therapie",
+          steps: ["Exploration des Selbstbildes", "Arbeit an Empathiefähigkeit", "Hinterfragen von Grandiositätsphantasien"],
+          meds: "Keine Standardmedikation (nur bei Komorbidität)", rp: "/me spiegelt das Verhalten des Patienten\n/do Der Patient reagiert abwertend",
+          note: "Therapeutische Distanz wahren (Gefahr der Manipulation)." }
     ];
 
-    let currentFilter = 'all';
+    let filterType = 'ALL';
 
-    function build() {
-        const list = document.getElementById('guide-list');
-        list.innerHTML = "";
+    function setFilter(type, btn) {
+        filterType = type;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        render();
+    }
+
+    function render() {
+        const query = document.getElementById('search').value.toLowerCase();
+        const grid = document.getElementById('grid');
+        grid.innerHTML = "";
+
         database.forEach(item => {
-            list.innerHTML += `
-                <div class="guide-card ${item.type}" data-type="${item.type}" data-search="${item.keywords} ${item.title.toLowerCase()}">
-                    <div class="card-header">
-                        <span>${item.title}</span>
-                        <small style="font-size: 0.6em; opacity: 0.7;">ID: ${item.id}</small>
-                    </div>
-                    <div class="card-body">
-                        <div>
-                            <span class="section-title">Behandlungsablauf</span>
+            const matchSearch = item.title.toLowerCase().includes(query) || item.tags.includes(query) || item.id.toString().includes(query);
+            const matchFilter = filterType === 'ALL' || item.type === filterType;
+
+            if (matchSearch && matchFilter) {
+                grid.innerHTML += `
+                    <div class="card ${item.type}">
+                        <div class="card-header">§${item.id} | ${item.title}</div>
+                        <div class="card-content">
+                            <span class="label">Behandlungsplan</span>
                             <ul>${item.steps.map(s => `<li>${s}</li>`).join('')}</ul>
-                        </div>
-                        <div>
-                            <span class="section-title">Medikation & Hinweise</span>
-                            <div class="med-info">
-                                💊 <strong>Substanzen:</strong> ${item.meds}<br>
-                                ⚠️ <small>${item.note}</small>
-                            </div>
-                        </div>
-                        <div style="grid-column: 1 / -1;">
-                            <span class="section-title">RP-Befehle (/me /do)</span>
+                            
+                            <span class="label">Medikamentenklassen / Hinweis</span>
+                            <span class="med-tag">${item.meds}</span>
+                            
+                            <span class="label">RP-Guide (/me /do)</span>
                             <div class="rp-box">${item.rp.replace(/\n/g, '<br>')}</div>
+                            
+                            <span class="label">Wichtige Warnung</span>
+                            <small>⚠️ ${item.note}</small>
                         </div>
-                    </div>
-                </div>`;
-        });
-    }
-
-    function setFilter(type) {
-        currentFilter = type;
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.type === type);
-        });
-        filter();
-    }
-
-    function filter() {
-        let query = document.getElementById('search').value.toLowerCase();
-        let cards = document.getElementsByClassName('guide-card');
-        
-        Array.from(cards).forEach(card => {
-            let matchSearch = card.dataset.search.includes(query);
-            let matchType = (currentFilter === 'all' || card.dataset.type === currentFilter);
-            
-            if (matchSearch && matchType && query.length > 1) {
-                card.style.display = "block";
-            } else if (query.length <= 1 && matchType && currentFilter !== 'all') {
-                card.style.display = "block"; // Zeige alle der Kategorie wenn Suche leer
-            } else {
-                card.style.display = "none";
+                    </div>`;
             }
         });
     }
 
-    build();
+    render(); // Initialer Start
 </script>
 
 </body>
