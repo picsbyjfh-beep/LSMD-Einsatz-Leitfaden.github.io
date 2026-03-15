@@ -42,6 +42,8 @@
         .rp-box { background: #000; color: #00b894; padding: 12px; border-radius: 6px; font-family: 'Courier New', monospace; margin-top: 10px; border-left: 4px solid #00b894; font-size: 0.9em; }
         .med-tag { color: #fdcb6e; font-weight: bold; }
         .warn { color: #ff7675; font-size: 0.85em; font-style: italic; }
+        ul { padding-left: 20px; margin: 10px 0; }
+        li { margin-bottom: 5px; }
     </style>
 </head>
 <body>
@@ -52,7 +54,6 @@
         <p>Professionelles Rollenspiel-Wissen für Medics</p>
     </div>
 
-    <!-- ACADEMY SECTION (Inspired by Medical RP Guide) -->
     <div class="academy-section">
         <div class="academy-title">🎓 Roleplayer's Guidebook (KISS-Method)</div>
         <div class="kiss-grid">
@@ -86,24 +87,37 @@
 
 <script>
     const database = [
-        // --- EMERGENCY ---
+        // --- EMERGENCY (NOTDIENST) ---
         { id: 101, type: "EMERGENCY", title: "Polytrauma (Autounfall)", tags: "unfall crash auto aufprall hws", steps: ["ABCDE-Check", "Stiffneck anlegen", "Vakuummatratze", "IV-Zugang"], meds: "Starkes Analgetikum (Schmerzmittel), Volumenersatz", rp: "/me fixiert das Stiffneck am Hals\n/do Ist der Patient ansprechbar?", note: "HWS-Stabilisierung hat oberste Priorität!" },
         { id: 102, type: "EMERGENCY", title: "Anaphylaxie (Schock)", tags: "allergie biene essen atemnot", steps: ["Adrenalin i.m.", "Hochdosiertes Cortison", "Sauerstoff (15L)", "Antihistaminikum"], meds: "Adrenalin, Glukokortikoid", rp: "/me rammt das Adrenalin-Pen in den Oberschenkel", note: "Ständige Reanimationsbereitschaft!" },
         { id: 103, type: "EMERGENCY", title: "Offene Fraktur", tags: "bruch bein knochen blutung", steps: ["Druckverband", "Wundreinigung (Spülung)", "Luftkammer-Schiene", "Abdeckung steril"], meds: "Analgetikum (Schmerzmittel)", rp: "/me fixiert die Beinschiene\n/me desinfiziert die Wundränder", note: "Keine Belastung des Knochens!" },
         { id: 104, type: "EMERGENCY", title: "Herzinfarkt (STEMI)", tags: "herz brust schmerz links infarkt", steps: ["Oberkörper hochlagern", "12-Kanal-EKG", "Sauerstoff", "Nitrospray"], meds: "Thrombozytenaggregationshemmer, Nitrat", rp: "/me klebt EKG-Elektroden auf\n/me reicht das Spray", note: "Absolute körperliche Ruhe!" },
         { id: 105, type: "EMERGENCY", title: "Überdosis (Opioide)", tags: "drogen junkie hero atemstopp", steps: ["Beutel-Masken-Beatmung", "Gabe eines Antidots", "Absaugen", "Seitenlage"], meds: "Opioid-Antagonist (Naloxon)", rp: "/me verabreicht das Antidot nasal\n/do Patient schnappt nach Luft", note: "Aggressionsgefahr nach Erwachen!" },
+        { id: 106, type: "EMERGENCY", title: "Lungenödem", tags: "atmen wasser lunge schaum herz", steps: ["Sitzende Lagerung", "CPAP-Beatmung (Maske)", "Nitroglyzerin", "Furosemid i.v."], meds: "Diuretikum (Entwässerungsmittel)", rp: "/me setzt die Beatmungsmaske fest auf\n/do Patient hustet rötlichen Schaum", note: "Absolute Erstickungsgefahr!" },
+        { id: 107, type: "EMERGENCY", title: "Hypoglykämie (Zucker)", tags: "diabetes zucker ohnmacht schweiß", steps: ["Blutzucker messen", "Glukose-Gabe (oral/i.v.)", "Überwachung", "Kohlenhydrat-Check"], meds: "G40 (Hochprozentige Glukose)", rp: "/me verabreicht die Glukose-Lösung über den Zugang", note: "Bewusstlose niemals oral füttern!" },
+        { id: 108, type: "EMERGENCY", title: "Epileptischer Anfall", tags: "krampf zucken grandmal", steps: ["Umgebung sichern", "Nachkrampfphase abwarten", "Seitenlage", "Vitalwerte"], meds: "Benzodiazepin (Krampfberuhiger)", rp: "/me legt ein Kissen unter den Kopf\n/do Patient krampft am ganzen Körper", note: "Nichts in den Mund stecken (Beißgefahr)!" },
+        { id: 109, type: "EMERGENCY", title: "Stichverletzung (Thorax)", tags: "messer stich brust lunge", steps: ["Druckverband", "Drei-Seiten-Verband", "Thoraxdrainage vorbereiten", "Volumensubstitution"], meds: "Starkes Schmerzmittel", rp: "/me klebt die Einstichstelle luftdicht ab", note: "Messer im Körper stecken lassen!" },
+        { id: 110, type: "EMERGENCY", title: "Rauchgasvergiftung", tags: "feuer rauch brand husten", steps: ["Brandschutzzone verlassen", "100% Sauerstoff", "Inhalationstherapie", "CO-Wert Messung"], meds: "Sauerstoff, Kortikoid-Spray", rp: "/me hält die Maske fest ans Gesicht", note: "Gefahr eines Lungenödems tritt verzögert auf!" },
 
-        // --- SURGERY ---
+        // --- SURGERY (CHIRURGIE) ---
         { id: 201, type: "SURGERY", title: "Kugel-Extraktion (Bauch)", tags: "schuss kugel op bauch chirurgie", steps: ["Laparotomie", "Saugung", "Gefäßklemmen", "Projektilbergung", "Darm-Check"], meds: "Anästhetikum (Vollnarkose), Breitbandantibiotikum", rp: "/me führt den Skalpellschnitt durch\n/me zieht das Projektil aus dem Gewebe", note: "Immer nach Austrittswunde suchen!" },
         { id: 202, type: "SURGERY", title: "Milz-Entfernung", tags: "milz ruptur blutung op ruptur", steps: ["Bauchraum öffnen", "Arterie klemmen", "Milz entnehmen", "Spülung", "Drainage"], meds: "Blutkonserven, Antibiotika", rp: "/me setzt Gefäßklemmen an die Milzarterie", note: "Immunschwäche nach der OP!" },
         { id: 203, type: "SURGERY", title: "Amputation (Unterschenkel)", tags: "bein säge unfall trauma amputieren", steps: ["Hautlappenbildung", "Gefäß-Ligatur", "Knochensäge", "Nerven-Kürzung", "Stumpf-Plastik"], meds: "Starkes Analgetikum, Lokaler Nervenblock", rp: "/me setzt die oszillierende Säge an", note: "Nur als letztes Mittel!" },
         { id: 204, type: "SURGERY", title: "Kraniotomie (Hirndruck)", tags: "kopf hirn blutung schädel op", steps: ["Schädelbohrung", "Hämatom absaugen", "Blutstillung (Elektro)", "Sonden-Einlage", "Deckel-Fixierung"], meds: "Osmotherapeutikum (Hirndrucksenker)", rp: "/me entlastet den massiven Druck am Gehirn", note: "Höchster Zeitdruck!" },
+        { id: 205, type: "SURGERY", title: "Appendektomie (Blinddarm)", tags: "bauch blinddarm schmerz entzündung", steps: ["Laparoskopie (3 Schnitte)", "Blinddarm isolieren", "Abbinden & Trennen", "Bergesack-Entnahme", "Spülung"], meds: "Narkosemittel, Breitband-Antibiotikum", rp: "/me führt die Kamera über den Bauchnabel ein", note: "Gefahr der Perforation (Durchbruch)!" },
+        { id: 206, type: "SURGERY", title: "Oberschenkelhalsbruch", tags: "bein bruch alt sturz hüfte", steps: ["Röntgen-Kontrolle", "Marknagelung oder Prothese", "Verschraubung", "Wundverschluss"], meds: "Heparin (Thromboseschutz)", rp: "/me bohrt den Marknagel in den Knochenkanal", note: "Hoher Blutverlust im Knochen möglich!" },
+        { id: 207, type: "SURGERY", title: "Gallenblasen-Entfernung", tags: "galle stein schmerz fett", steps: ["Gallengang abklemmen", "Gallenblase lösen", "Blutstillung", "Drainage"], meds: "Analgetikum, Spasmolytikum", rp: "/me setzt den Clip auf den Gallengang", note: "Häufig nach Gallensteinen nötig." },
+        { id: 208, type: "SURGERY", title: "Schädel-Hirn-Trauma (SHT III)", tags: "unfall kopf blutung koma", steps: ["Intubation", "ICP-Sonde (Druckmessung)", "Entlastungshämatom", "Koma-Monitoring"], meds: "Sedativum, Osmotherapeutikum", rp: "/me setzt den Bohrer für die Drucksonde an", note: "Pupillenkontrolle ist essenziell!" },
 
-        // --- PSYCH ---
+        // --- PSYCH (PSYCHOTHERAPIE) ---
         { id: 301, type: "PSYCH", title: "Schizophrenie (Wahn)", tags: "stimmen wahn psychose schizo", steps: ["Sicherheitsabstand", "Reizabschirmung", "Validierung der Angst", "Sedierung"], meds: "Neuroleptikum (Antipsychotikum)", rp: "/me spricht ruhig und sachlich\n/me vermeidet hastige Bewegungen", note: "Wahn niemals aktiv ausreden!" },
         { id: 302, type: "PSYCH", title: "Suizidalität (Akut)", tags: "tod leben verzweiflung springen", steps: ["Zuhören / Empathie", "Krisenplan", "Non-Suizid-Pakt", "Aufnahme"], meds: "Anxiolytikum (Beruhigungsmittel)", rp: "/me hört aktiv zu und spiegelt Gefühle", note: "Niemals unbeaufsichtigt lassen!" },
         { id: 303, type: "PSYCH", title: "Panikattacke", tags: "angst atmen herz sterben panik", steps: ["Grounding-Technik", "Bauchatmung anleiten", "Realitätscheck", "Tütenatmung"], meds: "Ggf. leichtes Beruhigungsmittel", rp: "/me leitet zur langsamen Atmung an", note: "Herzinfarkt vorher ausschließen!" },
-        { id: 304, type: "PSYCH", title: "Flashback (PTBS)", tags: "trauma erinnerung flashback krieg", steps: ["Hier-und-Jetzt", "Starke Reize (Igelball)", "Distanzierung", "Stabilisierung"], meds: "Antidepressivum (Langzeit)", rp: "/me reicht dem Patienten einen Igelball", note: "Keine unerwarteten Berührungen!" }
+        { id: 304, type: "PSYCH", title: "Flashback (PTBS)", tags: "trauma erinnerung flashback krieg", steps: ["Hier-und-Jetzt", "Starke Reize (Igelball)", "Distanzierung", "Stabilisierung"], meds: "Antidepressivum (Langzeit)", rp: "/me reicht dem Patienten einen Igelball", note: "Keine unerwarteten Berührungen!" },
+        { id: 305, type: "PSYCH", title: "Manische Episode", tags: "energie geld größenwahn wach", steps: ["Reizreduktion", "Struktur bieten", "Fremdgefährdung prüfen", "Abwendung von Fehlkäufen"], meds: "Stimmungsstabilisierer (Lithium)", rp: "/me unterbricht den Redeschwall höflich", note: "Patienten überschätzen ihre Kräfte maßlos!" },
+        { id: 306, type: "PSYCH", title: "Borderline-Krise (SVV)", tags: "ritzen schneiden druck impuls", steps: ["Wundversorgung", "Skills-Training (Ammoniak)", "Spannungsanalyse", "Validierung"], meds: "Bedarfsmedikation (Sedierung)", rp: "/me bietet dem Patienten ein Cool-Pack an", note: "Nicht verurteilen, sondern den Druck verstehen!" },
+        { id: 307, type: "PSYCH", title: "Alkoholdelir (Entzug)", tags: "alkohol entzug zittern käfer", steps: ["Überwachung Vitalwerte", "Flüssigkeitsersatz", "Vitamin B1 Gabe", "Lichtquelle anlassen"], meds: "Distraneurin oder Benzodiazepin", rp: "/me prüft das starke Zittern der Hände", note: "Lebensgefährliche Krampfanfälle möglich!" },
+        { id: 308, type: "PSYCH", title: "Burnout-Syndrom", tags: "arbeit müde leer erschöpft", steps: ["Krankschreibung/Ruhe", "Tagesstruktur", "Ressourcen-Aktivierung", "Sporttherapie"], meds: "Pflanzliche Präparate oder SSRI", rp: "/me erstellt einen Wochenplan mit Pausen", note: "Oft mit körperlichen Beschwerden getarnt." }
     ];
 
     let filterType = 'ALL';
