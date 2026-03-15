@@ -3,77 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LSMD | Professional Academy & Database</title>
+    <title>LSMD | Ultimate Academy & Database</title>
     <style>
         :root {
             --lsmd-red: #c0392b; --surgery-blue: #2980b9; --psych-purple: #8e44ad;
             --guide-gold: #f1c40f; --dark-bg: #0a0a0a; --card-bg: #161616; --text: #f0f0f0;
+            --success: #27ae60;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--dark-bg); color: var(--text); margin: 0; padding: 20px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--dark-bg); color: var(--text); margin: 0; padding: 10px; line-height: 1.5; }
         .container { max-width: 1400px; margin: auto; }
         
-        .header { text-align: center; border-bottom: 2px solid var(--lsmd-red); padding-bottom: 20px; margin-bottom: 20px; }
-        h1 { margin: 0; letter-spacing: 2px; }
+        .header { text-align: center; border-bottom: 2px solid var(--lsmd-red); padding-bottom: 20px; margin-bottom: 20px; background: #111; padding: 20px; border-radius: 0 0 15px 15px; }
+        
+        /* Tools Section */
+        .tools-area { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .tool-card { background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 10px; }
+        .tool-card h3 { margin-top: 0; color: var(--guide-gold); border-bottom: 1px solid #333; padding-bottom: 5px; }
 
-        /* Lern-Bereich (Guidebook) */
-        .academy-section { background: #1a1a1a; border: 1px solid var(--guide-gold); border-radius: 10px; padding: 20px; margin-bottom: 30px; }
-        .academy-title { color: var(--guide-gold); font-size: 1.5em; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #444; padding-bottom: 5px; }
-        .kiss-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .kiss-card { background: #222; padding: 15px; border-radius: 8px; border-left: 4px solid var(--guide-gold); }
-        .kiss-card h4 { margin-top: 0; color: var(--guide-gold); }
+        /* GCS Calculator */
+        .gcs-select { width: 100%; padding: 8px; margin: 5px 0; background: #222; color: white; border: 1px solid #444; border-radius: 4px; }
+        #gcs-result { font-size: 1.5em; font-weight: bold; color: var(--lsmd-red); text-align: center; margin-top: 10px; }
 
-        /* Suche & Filter */
+        /* Search & Filters */
         .search-container { position: sticky; top: 0; background: var(--dark-bg); padding: 15px 0; z-index: 100; border-bottom: 1px solid #333; }
-        .search-box { width: 100%; padding: 15px; background: #222; border: 1px solid #444; border-radius: 8px; color: white; font-size: 18px; outline: none; }
-        .filter-group { display: flex; gap: 10px; margin-top: 15px; justify-content: center; flex-wrap: wrap; }
-        .filter-btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; background: #333; color: #ccc; transition: 0.3s; font-weight: bold; }
+        .search-box { width: 100%; padding: 15px; background: #222; border: 1px solid #444; border-radius: 8px; color: white; font-size: 18px; box-sizing: border-box; }
+        .filter-group { display: flex; gap: 8px; margin-top: 15px; justify-content: center; flex-wrap: wrap; }
+        .filter-btn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; background: #333; color: #ccc; transition: 0.3s; font-weight: bold; font-size: 0.9em; }
         .filter-btn.active { background: var(--lsmd-red); color: white; }
 
-        /* Grid */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 25px; margin-top: 20px; }
-        .card { background: var(--card-bg); border-radius: 12px; border: 1px solid #222; overflow: hidden; display: flex; flex-direction: column; }
-        .card-header { padding: 15px; font-weight: bold; border-bottom: 4px solid transparent; }
+        /* Grid & Cards */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 20px; margin-top: 20px; }
+        .card { background: var(--card-bg); border-radius: 12px; border: 1px solid #222; display: flex; flex-direction: column; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-5px); border-color: #444; }
+        .card-header { padding: 15px; font-weight: bold; font-size: 1.1em; border-bottom: 4px solid #444; }
+        
         .EMERGENCY .card-header { border-color: var(--lsmd-red); color: #ff7675; background: #2a1010; }
         .SURGERY .card-header { border-color: var(--surgery-blue); color: #74b9ff; background: #101a2a; }
         .PSYCH .card-header { border-color: var(--psych-purple); color: #a29bfe; background: #1a102a; }
 
-        .card-content { padding: 20px; }
-        .label { color: #888; font-size: 0.75em; text-transform: uppercase; display: block; margin-top: 12px; border-bottom: 1px solid #333; padding-bottom: 3px; }
-        .rp-box { background: #000; color: #00b894; padding: 12px; border-radius: 6px; font-family: 'Courier New', monospace; margin-top: 10px; border-left: 4px solid #00b894; font-size: 0.9em; }
-        .med-tag { color: #fdcb6e; font-weight: bold; }
-        .warn { color: #ff7675; font-size: 0.85em; font-style: italic; }
-        ul { padding-left: 20px; margin: 10px 0; }
-        li { margin-bottom: 5px; }
+        .card-content { padding: 15px; flex-grow: 1; }
+        .label { color: #888; font-size: 0.7em; text-transform: uppercase; display: block; margin-top: 12px; border-bottom: 1px solid #333; padding-bottom: 2px; margin-bottom: 8px; }
+        
+        /* Checkbox Styling */
+        .step-item { display: flex; align-items: flex-start; margin-bottom: 6px; cursor: pointer; }
+        .step-item input { margin-right: 10px; margin-top: 4px; }
+        
+        .rp-box { background: #000; color: #00b894; padding: 10px; border-radius: 6px; font-family: 'Courier New', monospace; margin-top: 8px; border-left: 4px solid #00b894; font-size: 0.85em; white-space: pre-wrap; }
+        .med-tag { color: #fdcb6e; font-weight: bold; background: rgba(253, 203, 110, 0.1); padding: 4px 8px; border-radius: 4px; display: inline-block; }
+        .warn { color: #ff7675; font-size: 0.8em; font-style: italic; display: block; margin-top: 5px; }
+
+        .btn-random { background: var(--guide-gold); color: black; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin: 10px auto; display: block; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1>LSMD GLOBAL ACADEMY & DATABASE</h1>
-        <p>Professionelles Rollenspiel-Wissen für Medics</p>
+        <h1>LSMD PROFESSIONAL DATABASE</h1>
+        <p>Inklusive Psychopharmaka-Katalog & Chirurgie-Leitfaden</p>
+        <button class="btn-random" onclick="showRandom()">🎲 ZUFÄLLIGER ÜBUNGSFALL</button>
     </div>
 
-    <div class="academy-section">
-        <div class="academy-title">🎓 Roleplayer's Guidebook (KISS-Method)</div>
-        <div class="kiss-grid">
-            <div class="kiss-card">
-                <h4>1. Keep It Simple</h4>
-                <p>Nutze einfache Begriffe. Erkläre Abkürzungen (z.B. "HWS" statt nur HWS). Das Ziel ist Immersion, nicht ein echtes Medizinstudium.</p>
-            </div>
-            <div class="kiss-card">
-                <h4>2. Wirkstoffklassen</h4>
-                <p>Nenne keine Markennamen. Sag: "Ich verabreiche ein <strong>Antibiotikum</strong>" oder "Ich gebe ein <strong>lokales Anästhetikum</strong>".</p>
-            </div>
-            <div class="kiss-card">
-                <h4>3. Suspend disbelief</h4>
-                <p>Sei bereit für das Unmögliche. Ob Roboter, Dinosaurier oder Aliens – nimm die Geschichte deines Gegenüber ernst!</p>
+    <div class="tools-area">
+        <div class="tool-card">
+            <h3>Glasgow Coma Scale (GCS)</h3>
+            <label>Augen öffnen:</label>
+            <select id="gcs-e" class="gcs-select" onchange="calcGCS()">
+                <option value="4">4 - Spontan</option>
+                <option value="3">3 - Auf Aufforderung</option>
+                <option value="2">2 - Auf Schmerzreiz</option>
+                <option value="1">1 - Keine Reaktion</option>
+            </select>
+            <label>Verbale Antwort:</label>
+            <select id="gcs-v" class="gcs-select" onchange="calcGCS()">
+                <option value="5">5 - Orientiert</option>
+                <option value="4">4 - Desorientiert / Verwirrt</option>
+                <option value="3">3 - Inadäquate Worte</option>
+                <option value="2">2 - Unverständliche Laute</option>
+                <option value="1">1 - Keine Reaktion</option>
+            </select>
+            <label>Motorik:</label>
+            <select id="gcs-m" class="gcs-select" onchange="calcGCS()">
+                <option value="6">6 - Befolgt Anweisungen</option>
+                <option value="5">5 - Gezielte Schmerzabwehr</option>
+                <option value="4">4 - Ungezielte Schmerzabwehr</option>
+                <option value="3">3 - Beugesynergismen (Abnorm)</option>
+                <option value="2">2 - Strecksynergismen</option>
+                <option value="1">1 - Keine Reaktion</option>
+            </select>
+            <div id="gcs-result">GCS: 15/15</div>
+        </div>
+
+        <div class="tool-card">
+            <h3>Chirurgie-Material (Kompakt)</h3>
+            <div style="font-size: 0.85em; color: #ccc;">
+                <strong>Instrumente:</strong> Skalpell, Kauterisator (Veröden), Klemmen, Pinzetten, Laryngoskop, Tubus.<br><br>
+                <strong>Venen-Zugang:</strong> Stauband anlegen → Desinfizieren → Venflon setzen → Fixierpflaster → Spülen.
             </div>
         </div>
     </div>
 
     <div class="search-container">
-        <input type="text" id="search" class="search-box" placeholder="Suchen (z.B. Schuss, Psychose, Beinbruch, ID: 102)..." onkeyup="render()">
+        <input type="text" id="search" class="search-box" placeholder="Suchen nach Diagnose, Medikament (z.B. Sertralin), ID oder Symptom..." onkeyup="render()">
         <div class="filter-group">
             <button class="filter-btn active" onclick="setFilter('ALL', this)">ALLE</button>
             <button class="filter-btn" onclick="setFilter('EMERGENCY', this)">NOTDIENST</button>
@@ -87,45 +118,44 @@
 
 <script>
     const database = [
-        // --- EMERGENCY (NOTDIENST) ---
-        { id: 101, type: "EMERGENCY", title: "Polytrauma (Autounfall)", tags: "unfall crash auto aufprall hws", steps: ["ABCDE-Check", "Stiffneck anlegen", "Vakuummatratze", "IV-Zugang"], meds: "Starkes Analgetikum (Schmerzmittel), Volumenersatz", rp: "/me fixiert das Stiffneck am Hals\n/do Ist der Patient ansprechbar?", note: "HWS-Stabilisierung hat oberste Priorität!" },
-        { id: 102, type: "EMERGENCY", title: "Anaphylaxie (Schock)", tags: "allergie biene essen atemnot", steps: ["Adrenalin i.m.", "Hochdosiertes Cortison", "Sauerstoff (15L)", "Antihistaminikum"], meds: "Adrenalin, Glukokortikoid", rp: "/me rammt das Adrenalin-Pen in den Oberschenkel", note: "Ständige Reanimationsbereitschaft!" },
-        { id: 103, type: "EMERGENCY", title: "Offene Fraktur", tags: "bruch bein knochen blutung", steps: ["Druckverband", "Wundreinigung (Spülung)", "Luftkammer-Schiene", "Abdeckung steril"], meds: "Analgetikum (Schmerzmittel)", rp: "/me fixiert die Beinschiene\n/me desinfiziert die Wundränder", note: "Keine Belastung des Knochens!" },
-        { id: 104, type: "EMERGENCY", title: "Herzinfarkt (STEMI)", tags: "herz brust schmerz links infarkt", steps: ["Oberkörper hochlagern", "12-Kanal-EKG", "Sauerstoff", "Nitrospray"], meds: "Thrombozytenaggregationshemmer, Nitrat", rp: "/me klebt EKG-Elektroden auf\n/me reicht das Spray", note: "Absolute körperliche Ruhe!" },
-        { id: 105, type: "EMERGENCY", title: "Überdosis (Opioide)", tags: "drogen junkie hero atemstopp", steps: ["Beutel-Masken-Beatmung", "Gabe eines Antidots", "Absaugen", "Seitenlage"], meds: "Opioid-Antagonist (Naloxon)", rp: "/me verabreicht das Antidot nasal\n/do Patient schnappt nach Luft", note: "Aggressionsgefahr nach Erwachen!" },
-        { id: 106, type: "EMERGENCY", title: "Lungenödem", tags: "atmen wasser lunge schaum herz", steps: ["Sitzende Lagerung", "CPAP-Beatmung (Maske)", "Nitroglyzerin", "Furosemid i.v."], meds: "Diuretikum (Entwässerungsmittel)", rp: "/me setzt die Beatmungsmaske fest auf\n/do Patient hustet rötlichen Schaum", note: "Absolute Erstickungsgefahr!" },
-        { id: 107, type: "EMERGENCY", title: "Hypoglykämie (Zucker)", tags: "diabetes zucker ohnmacht schweiß", steps: ["Blutzucker messen", "Glukose-Gabe (oral/i.v.)", "Überwachung", "Kohlenhydrat-Check"], meds: "G40 (Hochprozentige Glukose)", rp: "/me verabreicht die Glukose-Lösung über den Zugang", note: "Bewusstlose niemals oral füttern!" },
-        { id: 108, type: "EMERGENCY", title: "Epileptischer Anfall", tags: "krampf zucken grandmal", steps: ["Umgebung sichern", "Nachkrampfphase abwarten", "Seitenlage", "Vitalwerte"], meds: "Benzodiazepin (Krampfberuhiger)", rp: "/me legt ein Kissen unter den Kopf\n/do Patient krampft am ganzen Körper", note: "Nichts in den Mund stecken (Beißgefahr)!" },
-        { id: 109, type: "EMERGENCY", title: "Stichverletzung (Thorax)", tags: "messer stich brust lunge", steps: ["Druckverband", "Drei-Seiten-Verband", "Thoraxdrainage vorbereiten", "Volumensubstitution"], meds: "Starkes Schmerzmittel", rp: "/me klebt die Einstichstelle luftdicht ab", note: "Messer im Körper stecken lassen!" },
-        { id: 110, type: "EMERGENCY", title: "Rauchgasvergiftung", tags: "feuer rauch brand husten", steps: ["Brandschutzzone verlassen", "100% Sauerstoff", "Inhalationstherapie", "CO-Wert Messung"], meds: "Sauerstoff, Kortikoid-Spray", rp: "/me hält die Maske fest ans Gesicht", note: "Gefahr eines Lungenödems tritt verzögert auf!" },
-
-        // --- SURGERY (CHIRURGIE) ---
-        { id: 201, type: "SURGERY", title: "Kugel-Extraktion (Bauch)", tags: "schuss kugel op bauch chirurgie", steps: ["Laparotomie", "Saugung", "Gefäßklemmen", "Projektilbergung", "Darm-Check"], meds: "Anästhetikum (Vollnarkose), Breitbandantibiotikum", rp: "/me führt den Skalpellschnitt durch\n/me zieht das Projektil aus dem Gewebe", note: "Immer nach Austrittswunde suchen!" },
-        { id: 202, type: "SURGERY", title: "Milz-Entfernung", tags: "milz ruptur blutung op ruptur", steps: ["Bauchraum öffnen", "Arterie klemmen", "Milz entnehmen", "Spülung", "Drainage"], meds: "Blutkonserven, Antibiotika", rp: "/me setzt Gefäßklemmen an die Milzarterie", note: "Immunschwäche nach der OP!" },
-        { id: 203, type: "SURGERY", title: "Amputation (Unterschenkel)", tags: "bein säge unfall trauma amputieren", steps: ["Hautlappenbildung", "Gefäß-Ligatur", "Knochensäge", "Nerven-Kürzung", "Stumpf-Plastik"], meds: "Starkes Analgetikum, Lokaler Nervenblock", rp: "/me setzt die oszillierende Säge an", note: "Nur als letztes Mittel!" },
-        { id: 204, type: "SURGERY", title: "Kraniotomie (Hirndruck)", tags: "kopf hirn blutung schädel op", steps: ["Schädelbohrung", "Hämatom absaugen", "Blutstillung (Elektro)", "Sonden-Einlage", "Deckel-Fixierung"], meds: "Osmotherapeutikum (Hirndrucksenker)", rp: "/me entlastet den massiven Druck am Gehirn", note: "Höchster Zeitdruck!" },
-        { id: 205, type: "SURGERY", title: "Appendektomie (Blinddarm)", tags: "bauch blinddarm schmerz entzündung", steps: ["Laparoskopie (3 Schnitte)", "Blinddarm isolieren", "Abbinden & Trennen", "Bergesack-Entnahme", "Spülung"], meds: "Narkosemittel, Breitband-Antibiotikum", rp: "/me führt die Kamera über den Bauchnabel ein", note: "Gefahr der Perforation (Durchbruch)!" },
-        { id: 206, type: "SURGERY", title: "Oberschenkelhalsbruch", tags: "bein bruch alt sturz hüfte", steps: ["Röntgen-Kontrolle", "Marknagelung oder Prothese", "Verschraubung", "Wundverschluss"], meds: "Heparin (Thromboseschutz)", rp: "/me bohrt den Marknagel in den Knochenkanal", note: "Hoher Blutverlust im Knochen möglich!" },
-        { id: 207, type: "SURGERY", title: "Gallenblasen-Entfernung", tags: "galle stein schmerz fett", steps: ["Gallengang abklemmen", "Gallenblase lösen", "Blutstillung", "Drainage"], meds: "Analgetikum, Spasmolytikum", rp: "/me setzt den Clip auf den Gallengang", note: "Häufig nach Gallensteinen nötig." },
-        { id: 208, type: "SURGERY", title: "Schädel-Hirn-Trauma (SHT III)", tags: "unfall kopf blutung koma", steps: ["Intubation", "ICP-Sonde (Druckmessung)", "Entlastungshämatom", "Koma-Monitoring"], meds: "Sedativum, Osmotherapeutikum", rp: "/me setzt den Bohrer für die Drucksonde an", note: "Pupillenkontrolle ist essenziell!" },
-
-        // --- PSYCH (PSYCHOTHERAPIE) ---
-        { id: 301, type: "PSYCH", title: "Schizophrenie (Wahn)", tags: "stimmen wahn psychose schizo", steps: ["Sicherheitsabstand", "Reizabschirmung", "Validierung der Angst", "Sedierung"], meds: "Neuroleptikum (Antipsychotikum)", rp: "/me spricht ruhig und sachlich\n/me vermeidet hastige Bewegungen", note: "Wahn niemals aktiv ausreden!" },
-        { id: 302, type: "PSYCH", title: "Suizidalität (Akut)", tags: "tod leben verzweiflung springen", steps: ["Zuhören / Empathie", "Krisenplan", "Non-Suizid-Pakt", "Aufnahme"], meds: "Anxiolytikum (Beruhigungsmittel)", rp: "/me hört aktiv zu und spiegelt Gefühle", note: "Niemals unbeaufsichtigt lassen!" },
-        { id: 303, type: "PSYCH", title: "Panikattacke", tags: "angst atmen herz sterben panik", steps: ["Grounding-Technik", "Bauchatmung anleiten", "Realitätscheck", "Tütenatmung"], meds: "Ggf. leichtes Beruhigungsmittel", rp: "/me leitet zur langsamen Atmung an", note: "Herzinfarkt vorher ausschließen!" },
-        { id: 304, type: "PSYCH", title: "Flashback (PTBS)", tags: "trauma erinnerung flashback krieg", steps: ["Hier-und-Jetzt", "Starke Reize (Igelball)", "Distanzierung", "Stabilisierung"], meds: "Antidepressivum (Langzeit)", rp: "/me reicht dem Patienten einen Igelball", note: "Keine unerwarteten Berührungen!" },
-        { id: 305, type: "PSYCH", title: "Manische Episode", tags: "energie geld größenwahn wach", steps: ["Reizreduktion", "Struktur bieten", "Fremdgefährdung prüfen", "Abwendung von Fehlkäufen"], meds: "Stimmungsstabilisierer (Lithium)", rp: "/me unterbricht den Redeschwall höflich", note: "Patienten überschätzen ihre Kräfte maßlos!" },
-        { id: 306, type: "PSYCH", title: "Borderline-Krise (SVV)", tags: "ritzen schneiden druck impuls", steps: ["Wundversorgung", "Skills-Training (Ammoniak)", "Spannungsanalyse", "Validierung"], meds: "Bedarfsmedikation (Sedierung)", rp: "/me bietet dem Patienten ein Cool-Pack an", note: "Nicht verurteilen, sondern den Druck verstehen!" },
-        { id: 307, type: "PSYCH", title: "Alkoholdelir (Entzug)", tags: "alkohol entzug zittern käfer", steps: ["Überwachung Vitalwerte", "Flüssigkeitsersatz", "Vitamin B1 Gabe", "Lichtquelle anlassen"], meds: "Distraneurin oder Benzodiazepin", rp: "/me prüft das starke Zittern der Hände", note: "Lebensgefährliche Krampfanfälle möglich!" },
-        { id: 308, type: "PSYCH", title: "Burnout-Syndrom", tags: "arbeit müde leer erschöpft", steps: ["Krankschreibung/Ruhe", "Tagesstruktur", "Ressourcen-Aktivierung", "Sporttherapie"], meds: "Pflanzliche Präparate oder SSRI", rp: "/me erstellt einen Wochenplan mit Pausen", note: "Oft mit körperlichen Beschwerden getarnt." }
+        // --- EMERGENCY ---
+        { id: 101, type: "EMERGENCY", title: "Polytrauma (Autounfall)", tags: "unfall crash auto hws", steps: ["ABCDE-Check", "HWS-Stabilisierung (Stiffneck)", "IV-Zugang (Venflon)", "Volumenersatz-Infusion"], meds: "Analgetikum (z.B. Morphin-Ersatz)", rp: "/me legt das Stauband an\n/me desinfiziert die Einstichstelle\n/me schiebt das Venflon in die Vene\n/do Ist Blutfluss in der Kammer sichtbar?", note: "HWS-Schutz vor jeder Bewegung!" },
+        { id: 102, type: "EMERGENCY", title: "Anaphylaktischer Schock", tags: "allergie biene essen schock", steps: ["Atemwege sichern", "Adrenalin i.m.", "Kortison hochdosiert", "H1-Blocker"], meds: "Adrenalin, Antihistaminikum", rp: "/me verabreicht Adrenalin in den Oberschenkelmuskel\n/do Schwellung der Atemwege lässt nach?", note: "Sofortige Intubationsbereitschaft!" },
+        
+        // --- SURGERY (Inkl. Dokumenten-Inhalt) ---
+        { id: 201, type: "SURGERY", title: "Schusswunde (Abdomen)", tags: "kugel bauch schuss op", steps: ["Skalpellschnitt (Laparotomie)", "Absaugen von Blut (Saugpumpe)", "Klemmen setzen (Blutstillung)", "Projektilbergung mit Pinzette", "Wundnaht (Fadenhalter/Nadel)"], meds: "Breitband-Antibiotikum, Narkosegas", rp: "/me setzt das Skalpell an und öffnet das Peritoneum\n/me verwendet den Kauterisator zum Veröden der Gefäße\n/me greift das Projektil mit der chirurgischen Pinzette", note: "Sterilität des Tisches und der Handschuhe prüfen!" },
+        { id: 205, type: "SURGERY", title: "Gallenblasenentfernung", tags: "galle op bauch", steps: ["Laparoskop-Kameras einführen", "Gallengang mit Clips verschließen", "Gallenblase lösen", "Bergung im Bergesack"], meds: "Anästhetikum, Spasmolytikum", rp: "/me führt das Laryngoskop zur Intubation ein\n/me setzt die Clips auf die Arteria cystica", note: "Vorsicht vor Gallenaustritt!" },
+        
+        // --- PSYCH (Inkl. Dokumenten-Inhalt) ---
+        { id: 301, type: "PSYCH", title: "Schwere Depression", tags: "traurig antriebslos sertralin", steps: ["Exploration der Stimmung", "Suizid-Assessment", "Einstellung auf Antidepressiva", "Psychotherapie-Begleitung"], meds: "Sertralin oder Fluoxetin (25-100mg)", rp: "/me reicht dem Patienten ein Glas Wasser\n/me händigt einen Blister Sertralin (40 Stk.) aus", note: "Einnahme 1x täglich morgens vor dem Essen!" },
+        { id: 302, type: "PSYCH", title: "Psychotische Episode / Schizo", tags: "wahn stimmen clozapin", steps: ["Reizabschirmung", "Fremdgefährdung prüfen", "Neuroleptika-Gabe", "Engmaschige Überwachung"], meds: "Clozapin (Start 12.5mg - Steigerung bis 300mg)", rp: "/me spricht beruhigend auf den Patienten ein\n/me händigt Blister mit 30 Stk. (15mg/Tab) aus", note: "Zwischen den Gaben 5-8 Stunden Pause einhalten!" },
+        { id: 303, type: "PSYCH", title: "Akute Panikattacke", tags: "angst herz panik diazepam", steps: ["Beruhigendes Gespräch", "Atemtraining (Tüte)", "Bedarfsmedikation (Anxiolytikum)"], meds: "Diazepam (2-4x tägl. halbe Tablette)", rp: "/me leitet zur Bauchatmung an\n/me händigt 30er Blister Diazepam aus", note: "Vorsicht! Hohes Abhängigkeitsrisiko. 3,5h Pause!" },
+        { id: 305, type: "PSYCH", title: "Bipolare Störung (Manie)", tags: "manie stimmung lithium", steps: ["Stimmungsstabilisierung", "Schutz vor Selbstüberschätzung", "Lithium-Spiegel Kontrolle"], meds: "Lithium (150mg - 300mg je nach Schwere)", rp: "/me erklärt die Notwendigkeit der Stabilisierung\n/me händigt 30er Blister Lithium aus", note: "Einnahme morgens direkt nach dem Aufstehen!" },
+        { id: 306, type: "PSYCH", title: "ADHS (Erwachsene/Kinder)", tags: "unruhe fokus ritalin", steps: ["Konzentrationstest", "Verhaltenstherapie", "Stimulanzien-Einstellung"], meds: "Methylphenidat (Ritalin) 10mg - 50mg tägl.", rp: "/me händigt 30er Blister Ritalin aus\n/me weist auf die maximale Tagesdosis von 50mg hin", note: "Verschreibung nur durch voll ausgebildete Therapeuten!" }
     ];
 
     let filterType = 'ALL';
+
+    function calcGCS() {
+        const e = parseInt(document.getElementById('gcs-e').value);
+        const v = parseInt(document.getElementById('gcs-v').value);
+        const m = parseInt(document.getElementById('gcs-m').value);
+        const sum = e + v + m;
+        const res = document.getElementById('gcs-result');
+        res.innerText = `GCS: ${sum}/15`;
+        res.style.color = sum <= 8 ? "#ff4757" : (sum <= 12 ? "#e67e22" : "#2ecc71");
+    }
 
     function setFilter(type, btn) {
         filterType = type;
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        render();
+    }
+
+    function showRandom() {
+        const randomItem = database[Math.floor(Math.random() * database.length)];
+        document.getElementById('search').value = randomItem.title;
         render();
     }
 
@@ -143,13 +173,22 @@
                     <div class="card ${item.type}">
                         <div class="card-header">§${item.id} | ${item.title}</div>
                         <div class="card-content">
-                            <span class="label">Behandlungsablauf</span>
-                            <ul>${item.steps.map(s => `<li>${s}</li>`).join('')}</ul>
-                            <span class="label">Wirkstoffklasse / Medikation</span>
+                            <span class="label">Behandlungsprotokoll (Checkliste)</span>
+                            <div>
+                                ${item.steps.map(s => `
+                                    <label class="step-item">
+                                        <input type="checkbox"> <span>${s}</span>
+                                    </label>
+                                `).join('')}
+                            </div>
+                            
+                            <span class="label">Medikation & Dosierung</span>
                             <span class="med-tag">${item.meds}</span>
-                            <span class="label">RP-Guide (/me /do)</span>
-                            <div class="rp-box">${item.rp.replace(/\n/g, '<br>')}</div>
-                            <span class="label">Wichtiger Hinweis</span>
+                            
+                            <span class="label">RP-Leitfaden (/me /do)</span>
+                            <div class="rp-box">${item.rp}</div>
+                            
+                            <span class="label">Medizinischer Fachhinweis</span>
                             <span class="warn">⚠️ ${item.note}</span>
                         </div>
                     </div>`;
@@ -158,6 +197,7 @@
     }
 
     render();
+    calcGCS();
 </script>
 </body>
 </html>
