@@ -3,58 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LSMD | Global Medical Database</title>
+    <title>LSMD | Ultimate Medical Knowledge Base</title>
     <style>
         :root {
             --lsmd-red: #c0392b; --surgery-blue: #2980b9; --psych-purple: #8e44ad;
             --dark-bg: #0a0a0a; --card-bg: #161616; --text: #f0f0f0;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--dark-bg); color: var(--text); margin: 0; padding: 20px; }
-        .container { max-width: 1200px; margin: auto; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--dark-bg); color: var(--text); margin: 0; padding: 20px; }
+        .container { max-width: 1400px; margin: auto; }
         
-        .header { text-align: center; border-bottom: 2px solid var(--lsmd-red); padding-bottom: 20px; margin-bottom: 20px; }
+        /* Header & Search */
+        .header { text-align: center; border-bottom: 2px solid var(--lsmd-red); padding-bottom: 20px; margin-bottom: 10px; }
         .search-container { position: sticky; top: 0; background: var(--dark-bg); padding: 15px 0; z-index: 100; border-bottom: 1px solid #333; }
         .search-box { width: 100%; padding: 15px; background: #222; border: 1px solid #444; border-radius: 8px; color: white; font-size: 18px; outline: none; }
-        .search-box:focus { border-color: var(--lsmd-red); }
+        .search-box:focus { border-color: var(--lsmd-red); box-shadow: 0 0 10px var(--lsmd-red); }
 
         .filter-group { display: flex; gap: 10px; margin-top: 15px; justify-content: center; flex-wrap: wrap; }
-        .filter-btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; background: #333; color: #ccc; transition: 0.3s; font-weight: bold; }
+        .filter-btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; background: #333; color: #ccc; transition: 0.3s; font-weight: bold; text-transform: uppercase; font-size: 0.85em; }
         .filter-btn.active { background: var(--lsmd-red); color: white; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 20px; margin-top: 20px; }
-        .card { background: var(--card-bg); border-radius: 10px; border: 1px solid #222; display: flex; flex-direction: column; overflow: hidden; }
+        /* Grid & Cards */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 25px; margin-top: 20px; }
+        .card { background: var(--card-bg); border-radius: 12px; border: 1px solid #222; overflow: hidden; display: flex; flex-direction: column; transition: 0.3s; }
+        .card:hover { border-color: #555; transform: translateY(-5px); }
         
-        .card-header { padding: 15px; font-weight: bold; font-size: 1.1em; border-bottom: 3px solid transparent; text-transform: uppercase; }
+        .card-header { padding: 15px 20px; font-weight: bold; font-size: 1.1em; border-bottom: 4px solid transparent; display: flex; justify-content: space-between; align-items: center; }
         .EMERGENCY .card-header { border-color: var(--lsmd-red); color: #ff7675; background: #2a1010; }
         .SURGERY .card-header { border-color: var(--surgery-blue); color: #74b9ff; background: #101a2a; }
         .PSYCH .card-header { border-color: var(--psych-purple); color: #a29bfe; background: #1a102a; }
 
-        .card-content { padding: 15px; flex-grow: 1; }
-        .label { color: #888; font-size: 0.75em; text-transform: uppercase; display: block; margin-top: 12px; border-bottom: 1px solid #333; padding-bottom: 3px; margin-bottom: 5px; }
+        .card-content { padding: 20px; flex-grow: 1; }
+        .label { color: #888; font-size: 0.75em; text-transform: uppercase; display: block; margin-top: 15px; border-bottom: 1px solid #333; padding-bottom: 3px; margin-bottom: 8px; font-weight: bold; }
         
-        .rp-box { background: #000; color: #00b894; padding: 12px; border-radius: 5px; font-family: 'Courier New', monospace; margin-top: 10px; border-left: 4px solid #00b894; font-size: 0.9em; line-height: 1.4; }
-        .med-tag { color: #fdcb6e; font-weight: bold; font-size: 0.95em; }
+        .rp-box { background: #000; color: #00b894; padding: 12px; border-radius: 6px; font-family: 'Courier New', monospace; margin-top: 10px; border-left: 4px solid #00b894; font-size: 0.9em; line-height: 1.5; }
+        .med-tag { color: #fdcb6e; font-weight: bold; font-size: 0.95em; display: inline-block; background: #2d2412; padding: 2px 8px; border-radius: 4px; }
         
-        ul { padding-left: 18px; margin: 5px 0; }
-        li { margin-bottom: 5px; font-size: 0.92em; }
-        .warn { color: #ff7675; font-size: 0.85em; font-style: italic; }
+        ul { padding-left: 20px; margin: 0; }
+        li { margin-bottom: 6px; font-size: 0.95em; }
+        .warn-box { background: #351414; color: #ff7675; padding: 10px; border-radius: 6px; font-size: 0.85em; margin-top: 15px; border: 1px solid #ff767533; }
+
+        @media (max-width: 500px) { .grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1>LSMD GLOBAL MEDICAL DATABASE</h1>
-        <p>Zentrales Informationssystem für Notdienst, Chirurgie & Psychotherapie</p>
+        <h1>LSMD | GLOBAL MEDICAL ENCYCLOPEDIA</h1>
+        <p>Vollständiges Kompendium für alle Fachbereiche & Szenarien</p>
     </div>
 
     <div class="search-container">
-        <input type="text" id="search" class="search-box" placeholder="Suche nach Szenario, ID, Körperteil oder Medikament..." onkeyup="render()">
+        <input type="text" id="search" class="search-box" placeholder="Suchen nach Verletzung, ID, Symptom, Medikament (z.B. Schuss, Psychose, Bruch)..." onkeyup="render()">
         <div class="filter-group">
-            <button class="filter-btn active" onclick="setFilter('ALL', this)">ALLE BEREICHE</button>
-            <button class="filter-btn" onclick="setFilter('EMERGENCY', this)">NOTDIENST</button>
-            <button class="filter-btn" onclick="setFilter('SURGERY', this)">CHIRURGIE (OP)</button>
-            <button class="filter-btn" onclick="setFilter('PSYCH', this)">PSYCHOTHERAPIE</button>
+            <button class="filter-btn active" onclick="setFilter('ALL', this)">Alle Fälle</button>
+            <button class="filter-btn" onclick="setFilter('EMERGENCY', this)">Notaufnahme</button>
+            <button class="filter-btn" onclick="setFilter('SURGERY', this)">Chirurgie (OP)</button>
+            <button class="filter-btn" onclick="setFilter('PSYCH', this)">Psychotherapie</button>
         </div>
     </div>
 
@@ -63,41 +68,47 @@
 
 <script>
     const database = [
-        // --- EMERGENCY (100+) ---
-        { id: 101, type: "EMERGENCY", title: "Polytrauma (Autounfall)", tags: "unfall crash trauma auto aufprall", steps: ["ABCDE-Schema anwenden", "HWS-Schiene (Stiffneck) fixieren", "Vakuummatratze zur Stabilisierung", "Großlumiger Zugang (Infusion)"], meds: "Fentanyl (50-100µg), Ringer-Laktat", rp: "/me fixiert das Stiffneck am Hals\n/do Ist eine Blutung im Bauchraum sichtbar?", note: "Halswirbelsäule hat oberste Priorität!" },
-        { id: 102, type: "EMERGENCY", title: "Anaphylaktischer Schock", tags: "allergie biene essen atemnot schwellung", steps: ["Adrenalin i.m. (Oberschenkel)", "Hochdosiert Cortison", "Sauerstoffgabe 15L (Maske)", "Antihistaminika i.v."], meds: "Adrenalin (0.5mg), Prednisolon (250mg)", rp: "/me rammt das Epipen in den Oberschenkel\n/do Die Schwellung im Hals lässt langsam nach", note: "Bereitschaft zur Intubation halten!" },
-        { id: 103, type: "EMERGENCY", title: "Herzinfarkt (STEMI)", tags: "herz brust schmerz links arm infarkt", steps: ["Oberkörper hochlagern", "12-Kanal-EKG schreiben", "Sauerstoff & Aspirin", "Vorbereitung Herzkatheter"], meds: "ASS (500mg), Heparin, Nitrospray", rp: "/me klebt EKG-Elektroden auf den Brustkorb\n/me reicht dem Patienten das Spray", note: "Absolute körperliche Ruhe für den Patienten!" },
-        { id: 104, type: "EMERGENCY", title: "Opioid-Überdosis", tags: "drogen junkie nadel hero atemstopp", steps: ["Beutelbeatmung einleiten", "Naloxon-Gabe (Nasal oder i.v.)", "Absaugen von Erbrochenem", "Fixierung am Bett"], meds: "Naloxon (0.4mg - 2.0mg)", rp: "/me spritzt das Naloxon in die Nase\n/do Der Patient schnappt plötzlich nach Luft", note: "Nach Erwachen droht extreme Aggressivität!" },
-        { id: 105, type: "EMERGENCY", title: "Spannungspneumothorax", tags: "lunge messer stich atemnot brust kugel", steps: ["Wunde abdichten", "Entlastungspunktion (Monaldi-Punkt)", "Sauerstoffgabe", "Thoraxdrainage legen"], meds: "Morphin (Schmerz), Sauerstoff", rp: "/me sticht die Entlastungsnadel in den Thorax\n/do Man hört hörbar gestaute Luft entweichen", note: "Lebensgefahr durch Herz-Druck!" },
-        { id: 106, type: "EMERGENCY", title: "Epileptischer Anfall", tags: "krampf zucken kopf fallen epilepsie", steps: ["Umgebung sichern (Verletzungsschutz)", "Nichts in den Mund stecken!", "Abklingen abwarten", "Benzodiazepine (Tavor)"], meds: "Diazepam (10mg) oder Lorazepam", rp: "/me schützt den Kopf des Patienten mit einer Decke\n/do Der Krampf lässt nach 3 Minuten nach", note: "Status Epilepticus (>5 Min) ist lebensgefährlich!" },
-        { id: 107, type: "EMERGENCY", title: "Arterielle Blutung", tags: "blut schnitt säge unfall wunde", steps: ["Direkter Druck auf Wunde", "Druckverband anlegen", "Tourniquet (Abbinden) bei Extremitäten", "Schocklagerung (Beine hoch)"], meds: "Tranexamsäure (Gerinnungsbeschleuniger)", rp: "/me zieht das Tourniquet am Oberarm fest\n/do Die spritzende Blutung stoppt sofort", note: "Tourniquet-Zeit gut sichtbar notieren!" },
-        { id: 108, type: "EMERGENCY", title: "Alkoholvergiftung", tags: "alkohol trinken bewusstlos gift party", steps: ["Stabile Seitenlage", "Blutzucker messen", "Infusion (Elektrolyte)", "Überwachung der Atmung"], meds: "Vitamin B1, Glucose (bei Bedarf)", rp: "/me dreht den Patienten in die Seitenlage\n/me führt den Blutzuckertest am Finger durch", note: "Erstickungsgefahr durch Erbrochenes!" },
-        { id: 109, type: "EMERGENCY", title: "Verbrennung (Schwer)", tags: "feuer brennen explosion haut brand", steps: ["Brandquelle entfernen", "Keimfreie Abdeckung (Metalline)", "Flüssigkeitssubstitution (Parkland)", "Schmerztherapie (Ketamin)"], meds: "Esketamin, Morphin, Ringer", rp: "/me deckt die Brandwunde steril ab\n/me stellt die Infusion auf maximale Laufrate", note: "Kein Eiswasser nutzen! (Unterkühlungsgefahr)" },
-        { id: 110, type: "EMERGENCY", title: "Kohlenmonoxid-Intox", tags: "gas rauch feuer garage abgase", steps: ["Rettung aus Gefahr (Eigenschutz!)", "100% Sauerstoff (High-Flow)", "EKG-Überwachung", "Druckkammerfahrt vorbereiten"], meds: "Sauerstoff (15 Liter/Min)", rp: "/me presst die Sauerstoffmaske auf das Gesicht\n/do Die Haut des Patienten wirkt kirschrot", note: "Sauerstoffsättigung im Display ist oft falsch!" },
+        // ==========================================
+        // EMERGENCY / NOTAUFNAHME (ID 100-199)
+        // ==========================================
+        { id: 101, type: "EMERGENCY", title: "Polytrauma (Autounfall)", tags: "unfall crash trauma auto aufprall wirbelsäule", steps: ["ABCDE-Schema anwenden", "HWS-Schiene (Stiffneck) fixieren", "Vakuummatratze zur Ganzkörper-Stabilisierung", "Großlumiger Zugang & Volumenersatz"], meds: "Fentanyl (100µg), Ringer-Laktat (1000ml)", rp: "/me stabilisiert den Kopf des Patienten\n/do Ist eine Deformation der Wirbelsäule sichtbar?\n/me schließt die Infusion an", note: "Lebensgefahr bei ruckartiger Bewegung!" },
+        { id: 102, type: "EMERGENCY", title: "Anaphylaxie (Schock)", tags: "allergie biene essen atemnot schwellung nesselsucht", steps: ["Adrenalin i.m. (Oberschenkel)", "Hochdosiert Cortison (250mg)", "Sauerstoffgabe 15L über Maske", "Antihistaminika i.v."], meds: "Adrenalin (0.5mg), Prednisolon, Fenistil", rp: "/me rammt das Adrenalin-Pen in den Vastus lateralis\n/do Die Atemwege schwellen langsam ab", note: "Ständige Reanimationsbereitschaft!" },
+        { id: 103, type: "EMERGENCY", title: "Herzinfarkt (STEMI)", tags: "herz brust schmerz links arm infarkt kardiologie", steps: ["Oberkörper 30° hochlagern", "12-Kanal-EKG schreiben", "Sauerstoffgabe & Aspirin (500mg)", "Heparin-Bolus & Nitrospray"], meds: "ASS, Heparin (5000 IE), Nitrolingual", rp: "/me klebt EKG-Elektroden auf den Thorax\n/me sprüht das Nitrospray unter die Zunge", note: "Zeitkritisch: Sofort ins Herzkatheterlabor!" },
+        { id: 104, type: "EMERGENCY", title: "Opioid-Überdosis", tags: "drogen junkie nadel hero atemstopp overdose", steps: ["Beutel-Masken-Beatmung", "Naloxon-Gabe (Nasal oder i.v.)", "Freihalten der Atemwege (Absaugung)", "Stabilisierung in Seitenlage"], meds: "Naloxon (0.4mg Schritte)", rp: "/me verabreicht Naloxon nasal\n/do Der Patient schnappt ruckartig nach Luft", note: "Vorsicht: Naloxon wirkt kürzer als Opioide (Nachdosierung!)" },
+        { id: 105, type: "EMERGENCY", title: "Offener Pneumothorax", tags: "lunge messer stich atemnot brust kugel", steps: ["Wundverschluss mit Asherman-Seal", "Nadel-Dekompression (Monaldi-Punkt)", "Sauerstoffgabe hochdosiert", "Thoraxdrainage (Bülau) vorbereiten"], meds: "Sauerstoff, Morphin (Schmerz)", rp: "/me setzt die Entlastungsnadel in den 2. ICR\n/do Man hört ein zischendes Geräusch der entweichenden Luft", note: "Gefahr des Spannungspneumothorax (Herz-Druck)!" },
+        { id: 106, type: "EMERGENCY", title: "Status Epilepticus", tags: "krampf zucken epilepsie kopf fall", steps: ["Umgebung sichern (Eigenschutz)", "Keine Beißkeile!", "Benzodiazepine (Tavor) i.v. oder nasal", "Sauerstoff & Absaugbereitschaft"], meds: "Lorazepam (4mg), Diazepam (10mg)", rp: "/me schützt den Kopf mit einer Decke\n/do Der Krampfzustand lässt nach 2 Minuten nach", note: "Jeder Anfall über 5 Minuten ist lebensgefährlich." },
+        { id: 107, type: "EMERGENCY", title: "Arterielle Blutung (Extremität)", tags: "blut schnitt säge unfall wunde arterie", steps: ["Manueller Druck auf die Wunde", "Druckverband anlegen", "Tourniquet bei Versagen des Verbandes", "Schocklagerung (Trendelenburg)"], meds: "Tranexamsäure (1g i.v.)", rp: "/me zieht das Tourniquet oberhalb der Wunde fest\n/do Die spritzende Blutung kommt zum Stillstand", note: "Uhrzeit der Abbindung auf die Stirn schreiben!" },
+        { id: 108, type: "EMERGENCY", title: "Schweres Lungenödem", tags: "wasser lunge herz atemnot rasseln", steps: ["Sitzende Lagerung (Beine tief)", "CPAP-Beatmung (Sauerstoff mit Druck)", "Nitrospray zur Vorlastsenkung", "Entwässerung (Diuretika)"], meds: "Furosemid (40mg), Nitroglycerin", rp: "/me lagert den Patienten aufrecht hin\n/do Man hört ein feuchtes Rasseln beim Ausatmen", note: "Patient hat Todesangst - psychische Betreuung!" },
+        { id: 109, type: "EMERGENCY", title: "Hypothermie (Erfrierung)", tags: "kalt eis wasser winter schnee", steps: ["Nasse Kleidung entfernen", "Isolationsfolie (Gold nach innen)", "Langsames Aufwärmen (0.5°C/h)", "Warme Infusionen (37°C)"], meds: "Warme G5-Infusionen", rp: "/me wickelt den Patienten in die Rettungsdecke\n/do Der Patient zittert stark am ganzen Körper", note: "Achtung: Bergungstod bei zu schneller Bewegung!" },
+        { id: 110, type: "EMERGENCY", title: "Hitzschlag (Hyperthermie)", tags: "sonne heiß kopf schwindel fieber", steps: ["Kühlung des Nackens & Achseln", "Flache Lagerung", "Flüssigkeitsersatz (isotonisch)", "Temperaturkontrolle"], meds: "Ringer-Laktat (gekühlt)", rp: "/me legt feuchte Tücher auf den Körper\n/do Die Körpertemperatur sinkt langsam", note: "Keine fiebersenkenden Mittel (wirken hier nicht)!" },
 
-        // --- SURGERY (200+) ---
-        { id: 201, type: "SURGERY", title: "Projektilextraktion (Bauch)", tags: "schuss kugel op bauch chirurgie kugel", steps: ["Laparotomie (Eröffnung Bauchraum)", "Blutabsaugung", "Arterienklemmen setzen", "Extraktion mit Kornzange", "Darm-Check auf Lecks"], meds: "Propofol, Fentanyl, Rocuronium", rp: "/me setzt das Skalpell an und schneidet\n/me zieht das Projektil aus dem Gewebe", note: "Immer nach einer Austrittswunde suchen!" },
-        { id: 202, type: "SURGERY", title: "Milz-Entfernung", tags: "milz innerlich blutung op bauch ruptur", steps: ["Bauchraum öffnen", "Arteria lienalis abklemmen", "Milz lösen und entnehmen", "Wundhöhle spülen", "Drainage einlegen"], meds: "Blutkonserven, Breitbandantibiotika", rp: "/me setzt die Gefäßklemmen an die Milzarterie\n/me entnimmt das rupturierte Organ", note: "Patient ist danach lebenslang infektionsgefährdet!" },
-        { id: 203, type: "SURGERY", title: "Amputation (Extremität)", tags: "bein säge trauma unfall nekrose amputieren", steps: ["Hautlappenbildung", "Gefäßunterbindung (Ligatur)", "Knochensäge verwenden", "Nerven-Kürzung", "Muskel-Plastik (Stumpfverschluss)"], meds: "Morphium, Lokalanästhesie-Block", rp: "/me setzt die Knochensäge am Femur an\n/do Man hört das Reiben des Sägeblattes", note: "Nur durchführen, wenn keine Rettung möglich ist!" },
-        { id: 204, type: "SURGERY", title: "Schädelöffnung (Hirnblutung)", tags: "kopf hirn blutung sturz schlag kraniotomie", steps: ["Hautschnitt (Bügelschnitt)", "Schädelbohrung (Trepanation)", "Hämatom absaugen", "Blutstillung (Elektrokoagulation)", "Knochendeckel fixieren"], meds: "Mannitol (Hirndrucksenkung)", rp: "/me bohrt vorsichtig den Schädelknochen auf\n/me entlastet den massiven Hirndruck", note: "Extrem zeitkritisch! Erblindungsgefahr." },
-        { id: 205, type: "SURGERY", title: "Herzschrittmacher-OP", tags: "herz puls schwach schrittmacher op", steps: ["Schnitt unter Schlüsselbein", "Vene punktieren", "Sonden zum Herzen schieben", "Aggregat in Hauttasche einsetzen"], meds: "Lokalanästhesie, Sedierung", rp: "/me schiebt die Sonde unter Röntgenkontrolle vor\n/do Das EKG zeigt nun einen stabilen Rhythmus", note: "Keine MRT-Untersuchungen nach der OP!" },
-        { id: 206, type: "SURGERY", title: "Organtransplantation (Leber)", tags: "leber organ ersatz chirurgie transplant", steps: ["Alte Leber explantieren", "Vena Cava verbinden", "Arterien anschließen", "Gallengang-Rekonstruktion"], meds: "Immunsuppressiva (Tacrolimus)", rp: "/me vernäht die Pfortader mit dem neuen Organ\n/do Die Leber füllt sich langsam mit Blut", note: "Abstoßungsgefahr ist extrem hoch!" },
-        { id: 207, type: "SURGERY", title: "Offene Herz-OP (Bypass)", tags: "herz bypass brust säge chirurgie", steps: ["Sternotomie (Brustbein sägen)", "Herz-Lungen-Maschine anschließen", "Venen-Bypass aufnähen", "Herz wieder schlagen lassen"], meds: "Heparin, Kardioplegie-Lösung", rp: "/me sägt das Brustbein der Länge nach auf\n/me näht die Vene an die Koronararterie", note: "Herz muss während der Naht stillstehen!" },
-        { id: 208, type: "SURGERY", title: "Hüft-Prothese (TEP)", tags: "hüfte knochen bruch gelenk op", steps: ["Hüftgelenk freilegen", "Hüftkopf absägen", "Pfanne ausfräsen", "Prothesenschaft einzementieren"], meds: "Vollnarkose, Heparin", rp: "/me fräst die Pfanne im Beckenknochen aus\n/me hämmert den Metallschaft in den Knochen", note: "Achtung vor Luxation (Auskugeln) nach OP!" },
-        { id: 209, type: "SURGERY", title: "Lungenflügel-Entfernung", tags: "lunge krebs schuss op thorax", steps: ["Thorakotomie (Brustkorb öffnen)", "Lungenarterie klemmen", "Hauptbronchus vernähen", "Lungenflügel entnehmen"], meds: "Analgetika (hochdosiert)", rp: "/me verschließt den Bronchusstumpf mit Klammern\n/me hebt den geschädigten Lungenflügel heraus", note: "Patient muss Atemtherapie machen!" },
-        { id: 210, type: "SURGERY", title: "Tracheotomie (Not-OP)", tags: "hals schnitt atmen luftröhre kris", steps: ["Hals überstrecken", "Schnitt zwischen Ringknorpel", "Spreizen der Luftröhre", "Kanüle einführen"], meds: "Lokalanästhesie, Desinfektion", rp: "/me setzt den waagerechten Schnitt am Hals\n/me schiebt das Kunststoffrohr in die Trachea", note: "Nur wenn Intubation über Mund unmöglich ist!" },
+        // ==========================================
+        // SURGERY / CHIRURGIE (ID 200-299)
+        // ==========================================
+        { id: 201, type: "SURGERY", title: "Projektilextraktion (Torax)", tags: "schuss kugel op brust chirurgie lunge", steps: ["Thorakotomie (Eröffnung Brustkorb)", "Blutabsaugung (Cellsaver)", "Blutstillung mittels Elektrokoagulation", "Extraktion des Projektils mit Kornzange", "Thoraxdrainage einlegen"], meds: "Fentanyl, Propofol, Esmeron", rp: "/me schneidet entlang der Rippenbögen\n/me spreizt den Thorax mit dem Rippenspreizer\n/me greift das Projektil hinter dem Lungenflügel", note: "Gefahr der Lungenkollabierung während OP!" },
+        { id: 202, type: "SURGERY", title: "Not-Splenektomie (Milz)", tags: "milz ruptur bauch blutung op bauchschuss", steps: ["Medianer Bauchschnitt", "Abklemmen der Milzarterie (A. lienalis)", "Organlöschung aus dem Ligament", "Vollständige Entfernung", "Bauchraumspülung"], meds: "Blutkonserven (0-Negativ), Antibiotika", rp: "/me setzt die Gefäßklemmen an den Milzstiel\n/me hebt das stark blutende Organ aus dem Bauch", note: "Patient benötigt danach lebenslang Schutzimpfungen!" },
+        { id: 203, type: "SURGERY", title: "Amputation (Unterschenkel)", tags: "bein säge unfall nekrose trauma amputieren", steps: ["Markierung der Hautlappen", "Gefäßunterbindung (Ligatur)", "Durchtrennung des Knochens (Säge)", "Nervenrückkürzung", "Myoplastik (Muskelpolsterung)"], meds: "Morphium, Lokalanästhesie-Block", rp: "/me setzt die oszillierende Säge an den Tibiaknochen\n/do Das metallische Geräusch hallt durch den OP", note: "Stumpf muss postoperativ gewickelt werden!" },
+        { id: 204, type: "SURGERY", title: "Kraniotomie (Hirn-OP)", tags: "kopf hirn blutung schlag schädel trauma", steps: ["Bohrloch-Trepanation", "Entfernung des Knochendeckels", "Hämatom-Ausräumung", "Blutstillung der Dura-Gefäße", "Einsetzen einer Hirndrucksonde"], meds: "Mannitol (Hirndrucksenkung)", rp: "/me bohrt vorsichtig den Schädelknochen auf\n/me entlastet den massiven Druck auf das Gehirn", note: "Extremer Zeitdruck - jede Minute zählt für das Hirn!" },
+        { id: 205, type: "SURGERY", title: "Bypass-OP (Herz)", tags: "herz bypass gefäß op brust kardiologie", steps: ["Sternotomie (Brustbeinöffnung)", "Anschluss Herz-Lungen-Maschine", "Entnahme der V. saphena (Bein)", "Anastomose (Nähen) am Herzen"], meds: "Heparin, Kardioplegie-Lösung", rp: "/me vernäht die Vene mit der Koronararterie\n/do Das Herz schlägt nach dem Schock wieder eigenständig", note: "Herz wird während der OP künstlich gestoppt!" },
+        { id: 206, type: "SURGERY", title: "Appendektomie (Blinddarm)", tags: "bauch schmerz blinddarm entzündung op", steps: ["Laparoskopie (3-Punkt-Schnitt)", "Aufsuchen des Appendix", "Abbindung der Basis", "Bergen des Entzündungsherdes"], meds: "Vollnarkose", rp: "/me führt die Kamera über den Nabel ein\n/me brennt den entzündeten Blinddarm ab", note: "Bei Perforation (Durchbruch) droht Sepsis!" },
+        { id: 207, type: "SURGERY", title: "Lebertransplantation", tags: "leber organ ersatz transplant chirurgie", steps: ["Explantation der kranken Leber", "Vena Cava Anschluss", "Anastomose der Pfortader", "Rekonstruktion der Gallengänge"], meds: "Immunsuppressiva", rp: "/me setzt das Spenderorgan vorsichtig ein\n/me prüft die Durchblutung des neuen Gewebes", note: "Abstoßungsreaktionen in den ersten 48h kritisch." },
+        { id: 208, type: "SURGERY", title: "Aorten-Aneurysma (Stent)", tags: "bauch schlagader platz gefäß op", steps: ["Leistenzugang punktieren", "Einführen des Stent-Grafts", "Platzierung unter Röntgenkontrolle", "Entfaltung des Metallgitters"], meds: "Kontrastmittel, Heparin", rp: "/me schiebt den Katheter bis zur Aorta vor\n/do Der Stent entfaltet sich und dichtet die Wand ab", note: "Höchste Gefahr der Ruptur während des Eingriffs!" },
+        { id: 209, type: "SURGERY", title: "Hüft-TEP (Vollprothese)", tags: "hüfte gelenk bruch knochen op alt", steps: ["Hüftkopf-Resektion (Absägen)", "Auffräsen der Gelenkpfanne", "Einsetzen des Metallschafts", "Einrenken des neuen Gelenks"], meds: "Narkose, Heparin", rp: "/me fräst die Pfanne im Beckenknochen aus\n/me hämmert den Prothesenschaft in den Femur", note: "Postoperative Mobilisierung am ersten Tag!" },
+        { id: 210, type: "SURGERY", title: "Tracheotomie (Hals-OP)", tags: "hals schnitt luftröhre atmen not op", steps: ["Schnitt zwischen Schildknorpel", "Spreizen der Trachea", "Einführen der Trachealkanüle", "Fixierung & Beatmungstest"], meds: "Lokalanästhesie, Desinfektion", rp: "/me setzt den waagerechten Schnitt am Kehlkopf\n/me schiebt den Tubus direkt in die Luftröhre", note: "Ultima Ratio bei verlegten Atemwegen!" },
 
-        // --- PSYCHOTHERAPIE (300+) ---
-        { id: 301, type: "PSYCH", title: "Paranoide Schizophrenie", tags: "stimmen wahn psychose angst schizo", steps: ["Sicherheitsabstand halten", "Reizabschirmung (ruhig)", "Realitätsprüfung (sanft)", "Medikamentöse Einstellung"], meds: "Haloperidol (5mg), Olanzapin", rp: "/me spricht mit sanfter, ruhiger Stimme\n/me vermeidet hastige Bewegungen", note: "Wahn niemals ausreden, sondern Angst validieren!" },
-        { id: 302, type: "PSYCH", title: "Akute Suizidalität", tags: "tod leben ende springen verzweiflung", steps: ["Beziehungsaufbau / Zuhören", "Krisenplan erstellen", "Non-Suizid-Pakt schließen", "Ggf. Zwangseinweisung (SGB)"], meds: "Lorazepam (Tavor) zur Beruhigung", rp: "/me hört aktiv zu und nickt empathisch\n/me bietet dem Patienten ein Glas Wasser an", note: "Patient darf keine Sekunde unbeaufsichtigt sein!" },
-        { id: 303, type: "PSYCH", title: "Panikattacke (Akut)", tags: "angst atmen herz sterben panik", steps: ["Grounding-Technik (5-4-3-2-1)", "Anleitung zur Bauchatmung", "In Papiertüte atmen lassen", "Beruhigendes Gespräch"], meds: "Baldrian oder Tavor (bei Extremfall)", rp: "/me leitet den Patienten zum ruhigen Atmen an\n/me hält festen Blickkontakt", note: "Physische Ursachen (Herzinfarkt) vorher ausschließen!" },
-        { id: 304, type: "PSYCH", title: "PTBS (Flashback)", tags: "trauma krieg gewalt erinnerung flashback", steps: ["Hier-und-Jetzt Orientierung", "Starke Reize (Ammoniak/Igelball)", "Distanzierung vom Erlebten", "Sicherheitsgefühl vermitteln"], meds: "Antidepressiva (Sertralin)", rp: "/me reicht dem Patienten ein Ammoniak-Stäbchen\n/me fragt nach dem heutigen Wochentag", note: "Keine Berührungen während eines Flashbacks!" },
-        { id: 305, type: "PSYCH", title: "Bipolare Störung (Manie)", tags: "energie geld wahn party manisch", steps: ["Reizreduktion (Einzelzimmer)", "Finanzielle Vormundschaft klären", "Schlafhygiene erzwingen", "Stimmungsstabilisierer"], meds: "Lithium, Quetiapin", rp: "/me versucht den Redeschwall sanft zu bremsen\n/do Patient wirkt extrem getrieben und distanzlos", note: "Manische Patienten ignorieren körperliche Erschöpfung!" },
-        { id: 306, type: "PSYCH", title: "Narzisstische Störung", tags: "ego narzissmus wut therapie stolz", steps: ["Spiegelung des Verhaltens", "Grenzen ziehen (Therapievertrag)", "Arbeit an der Empathie", "Umgang mit Kränkungen"], meds: "Keine (außer bei Depression)", rp: "/me bleibt professionell und sachlich distanziert\n/do Patient versucht den Therapeuten abzuwerten", note: "Thalasso-Effekt: Therapeut wird oft idealisiert." },
-        { id: 307, type: "PSYCH", title: "Zwangsstörung (Waschzwang)", tags: "hände waschen zwang ritual sauber", steps: ["Exposition (Dreck aushalten)", "Reaktionsmanagement", "Angst-Hierarchie erstellen", "Kognitive Umstrukturierung"], meds: "Clomipramin (hohe Dosis)", rp: "/me begleitet den Patienten zum Waschbecken\n/me bittet ihn, das Waschen zu verzögern", note: "Rituale niemals gewaltsam unterbrechen!" },
-        { id: 308, type: "PSYCH", title: "Borderline (SVV)", tags: "schneiden ritz impuls emotionen", steps: ["Skill-Training (DBT)", "Notfallkoffer (Skill-Box)", "Validierung der Emotionen", "Spannungskurve analysieren"], meds: "Neuroleptika (bei Impulsspitzen)", rp: "/me bespricht die aktuelle Anspannung (1-100)\n/me zeigt Alternativen zum Ritzen (Gummi)", note: "Klare Absprachen bzgl. Selbstverletzung treffen." },
-        { id: 309, type: "PSYCH", title: "Anorexie (Magersucht)", tags: "essen dünn gewicht hungern", steps: ["Esstagebuch führen", "Gewichts-Vertrag schließen", "Körperbild-Therapie", "Überwachung nach dem Essen"], meds: "Nahrungsergänzungsmittel", rp: "/me wiegt den Patienten mit dem Rücken zur Waage\n/me bespricht die Mahlzeit für heute", note: "Achtung: Patienten verstecken oft Gewichte!" },
-        { id: 310, type: "PSYCH", title: "Dissoziative Identität", tags: "persönlichkeit spaltung trauma ego", steps: ["Sicherheit im System schaffen", "Kommunikation der Anteile", "Trauma-Bearbeitung (spät)", "Alltagsbewältigung"], meds: "Keine spezifischen Medikamente", rp: "/me fragt vorsichtig, wer gerade 'vorne' ist\n/me macht sich Notizen zum Stimmenwechsel", note: "Geduld ist hier der wichtigste Faktor!" }
+        // ==========================================
+        // PSYCH / PSYCHOTHERAPIE (ID 300-399)
+        // ==========================================
+        { id: 301, type: "PSYCH", title: "Paranoide Schizophrenie", tags: "stimmen wahn psychose angst schizo geister", steps: ["Reizabschirmung (Dunkler Raum)", "Deeskalationsgespräch", "Realitätsprüfung (vorsichtig)", "Neuroleptika-Einstellung"], meds: "Haloperidol (5mg), Olanzapin", rp: "/me hält respektvollen Abstand zum Patienten\n/me spricht leise und ohne Wertung", note: "Wahn niemals ausreden, aber Verständnis für Angst zeigen." },
+        { id: 302, type: "PSYCH", title: "Akute Suizidalität", tags: "tod leben ende springen verzweiflung krise", steps: ["Unmittelbare Krisenintervention", "Non-Suizid-Pakt (Vertrag)", "Gefährdungseinschätzung", "Stationäre Aufnahme (geschlossen)"], meds: "Lorazepam (Tavor) zur Beruhigung", rp: "/me hört aktiv zu und spiegelt Emotionen\n/me bietet dem Patienten einen sicheren Raum an", note: "Patient darf keine Sekunde unbeaufsichtigt bleiben!" },
+        { id: 303, type: "PSYCH", title: "Panikattacke (Akut)", tags: "angst atmen herz sterben panik atemnot", steps: ["Grounding (5-4-3-2-1 Methode)", "Anleitung zur Bauchatmung", "Realitätscheck (Körperwerte)", "Entfernung aus der Triggersituation"], meds: "Baldrian oder Tavor (Extremfall)", rp: "/me leitet den Patienten zur langsamen Atmung an\n/me hält festen Blickkontakt zur Beruhigung", note: "Körperliche Ursachen (Herzinfarkt) vorher ausschließen!" },
+        { id: 304, type: "PSYCH", title: "PTBS (Flashback)", tags: "trauma krieg gewalt erinnerung flashback schock", steps: ["Distanzierung vom Trauma-Reiz", "Skills (Ammoniak, Igelball)", "Hier-und-Jetzt Orientierung", "Stabilisierungstechniken"], meds: "Sertralin (Langzeit-Therapie)", rp: "/me reicht dem Patienten einen Igelball zur haptischen Reizung\n/me fragt nach der aktuellen Wandfarbe", note: "Körperkontakt während Flashbacks vermeiden!" },
+        { id: 305, type: "PSYCH", title: "Manie (Bipolare Störung)", tags: "energie geld wahn party manisch hyper", steps: ["Schutz vor Selbstüberschätzung", "Reizreduktion (Reizarmut)", "Schlafhygiene erzwingen", "Stimmungsstabilisierer"], meds: "Lithium, Quetiapin", rp: "/me versucht den Redeschwall sanft zu begrenzen\n/do Der Patient wirkt euphorisch und distanzlos", note: "Manische Patienten vernachlässigen Grundbedürfnisse (Essen/Schlaf)!" },
+        { id: 306, type: "PSYCH", title: "Narzisstische Krise", tags: "ego narzissmus wut kränkung therapie", steps: ["Umgang mit Entwertung", "Spiegelung des Verhaltens", "Arbeit am Selbstwertkern", "Konfrontation mit der Realität"], meds: "Keine (außer bei Depression)", rp: "/me bleibt professionell und sachlich distanziert\n/do Der Patient versucht den Therapeuten abzuwerten", note: "Gegenübertragung des Therapeuten beachten!" },
+        { id: 307, type: "PSYCH", title: "Zwangsstörung (Waschzwang)", tags: "hände waschen zwang ritual kontrolle", steps: ["Exposition (Reizkonfrontation)", "Ritualverhinderung", "Hinterfragen der magischen Gedanken", "Verhaltensanalyse"], meds: "Clomipramin (hohe Dosis)", rp: "/me begleitet den Patienten zum Waschbecken\n/me bittet ihn, das Waschen für 10 Min aufzuschieben", note: "Rituale niemals gewaltsam unterbrechen (Angst-Peak)!" },
+        { id: 308, type: "PSYCH", title: "Borderline (SVV)", tags: "schneiden ritz impuls emotion spannung", steps: ["Spannungsanalyse (Skala 1-100)", "Skill-Training (DBT)", "Notfallkoffer-Einsatz", "Validierung der Gefühle"], meds: "Neuroleptika bei Impulsspitzen", rp: "/me bespricht die aktuelle Anspannungsebene\n/me zeigt alternative Reize (Gummiband am Handgelenk)", note: "Klare Absprachen bzgl. Wundversorgung treffen." },
+        { id: 309, type: "PSYCH", title: "Anorexie (Magersucht)", tags: "essen dünn gewicht hungern hunger", steps: ["Gewichtsmanagement", "Esstagebuch führen", "Körperbild-Therapie", "Überwachung nach den Mahlzeiten"], meds: "Zink, Vitamin-Präparate", rp: "/me wiegt den Patienten mit dem Rücken zur Waage\n/me bespricht den Mahlzeitenplan für die Woche", note: "Patienten manipulieren oft ihr Gewicht (Gewichte in Taschen)!" },
+        { id: 310, type: "PSYCH", title: "Dissoziative Identitätsstörung", tags: "persönlichkeit spaltung trauma multiple ego", steps: ["Sicherheitsaufbau im System", "Kommunikation zwischen Anteilen", "Traumabearbeitung (langfristig)", "Alltagsbewältigungshilfen"], meds: "Keine spezifischen Medikamente", rp: "/me fragt vorsichtig nach dem Namen des aktuellen Anteils\n/me macht sich Notizen zum Stimmenwechsel", note: "Geduld und absolute Verlässlichkeit sind essenziell!" }
     ];
 
     let filterType = 'ALL';
@@ -115,32 +126,38 @@
         grid.innerHTML = "";
 
         database.forEach(item => {
-            const matchSearch = item.title.toLowerCase().includes(query) || item.tags.toLowerCase().includes(query) || item.id.toString().includes(query);
+            const matchSearch = item.title.toLowerCase().includes(query) || 
+                               item.tags.toLowerCase().includes(query) || 
+                               item.id.toString().includes(query);
             const matchFilter = filterType === 'ALL' || item.type === filterType;
 
             if (matchSearch && matchFilter) {
                 grid.innerHTML += `
                     <div class="card ${item.type}">
-                        <div class="card-header">§${item.id} | ${item.title}</div>
+                        <div class="card-header">
+                            <span>§${item.id} | ${item.title}</span>
+                        </div>
                         <div class="card-content">
-                            <span class="label">Behandlungsplan</span>
+                            <span class="label">Behandlungsablauf</span>
                             <ul>${item.steps.map(s => `<li>${s}</li>`).join('')}</ul>
                             
-                            <span class="label">Medikation / Stoffklasse</span>
+                            <span class="label">Medikation & Stoffklasse</span>
                             <span class="med-tag">${item.meds}</span>
                             
                             <span class="label">RP-Guide (/me /do)</span>
                             <div class="rp-box">${item.rp.replace(/\n/g, '<br>')}</div>
                             
-                            <span class="label">Hinweis & Warnung</span>
-                            <span class="warn">⚠️ ${item.note}</span>
+                            <div class="warn-box">
+                                <strong>⚠️ WICHTIGER HINWEIS:</strong><br>
+                                ${item.note}
+                            </div>
                         </div>
                     </div>`;
             }
         });
     }
 
-    // Initiales Rendern beim Laden der Seite
+    // Erster Start
     render();
 </script>
 
