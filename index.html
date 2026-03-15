@@ -3,116 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LSMD | Fachbereichs-Leitfaden</title>
+    <title>LSMD | Professional Medical Database</title>
     <style>
-        :root { --lsmd-red: #c0392b; --dark-bg: #121212; --card-bg: #1e1e1e; --text: #e0e0e0; --surgery-blue: #2980b9; --therapy-purple: #8e44ad; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--dark-bg); color: var(--text); padding: 20px; }
-        .container { max-width: 900px; margin: auto; }
-        h1 { color: var(--lsmd-red); text-align: center; text-transform: uppercase; }
-        .search-box { width: 100%; padding: 15px; background: #252525; border: 1px solid var(--lsmd-red); border-radius: 8px; color: white; margin-bottom: 20px; box-sizing: border-box; }
+        :root {
+            --lsmd-red: #c0392b;
+            --surgery-blue: #2980b9;
+            --psych-purple: #8e44ad;
+            --dark-bg: #0f0f0f;
+            --card-bg: #1a1a1a;
+            --text: #e0e0e0;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; background: var(--dark-bg); color: var(--text); margin: 0; padding: 20px; }
+        .container { max-width: 1100px; margin: auto; }
         
-        .guide-card { background: var(--card-bg); border-radius: 8px; margin-bottom: 15px; border-left: 5px solid #444; display: none; }
-        .surgery { border-left-color: var(--surgery-blue); }
-        .therapy { border-left-color: var(--therapy-purple); }
+        .header { text-align: center; border-bottom: 2px solid var(--lsmd-red); padding-bottom: 20px; margin-bottom: 30px; }
+        h1 { margin: 0; letter-spacing: 3px; color: var(--lsmd-red); text-transform: uppercase; }
+
+        .search-container { position: sticky; top: 10px; z-index: 1000; background: var(--dark-bg); padding: 10px 0; }
+        .search-box { width: 100%; padding: 18px; background: #222; border: 1px solid #444; border-radius: 10px; color: white; font-size: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .search-box:focus { border-color: var(--lsmd-red); outline: none; }
+
+        .filter-btns { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; }
+        .filter-btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; background: #333; color: white; transition: 0.3s; }
+        .filter-btn.active[data-type="all"] { background: #555; }
+        .filter-btn.active[data-type="emergency"] { background: var(--lsmd-red); }
+        .filter-btn.active[data-type="surgery"] { background: var(--surgery-blue); }
+        .filter-btn.active[data-type="psych"] { background: var(--psych-purple); }
+
+        .guide-card { background: var(--card-bg); border-radius: 12px; margin-bottom: 25px; overflow: hidden; border: 1px solid #333; display: none; transition: 0.3s; }
+        .card-header { padding: 15px 25px; font-size: 1.3em; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
         
-        .card-header { background: #252525; padding: 15px 20px; font-weight: bold; display: flex; justify-content: space-between; }
-        .card-body { padding: 20px; line-height: 1.6; }
+        /* Fachbereich-Farben */
+        .emergency .card-header { background: #351414; color: #ff6b6b; border-bottom: 3px solid var(--lsmd-red); }
+        .surgery .card-header { background: #142535; color: #5dade2; border-bottom: 3px solid var(--surgery-blue); }
+        .psych .card-header { background: #251435; color: #bb8fce; border-bottom: 3px solid var(--psych-purple); }
+
+        .card-body { padding: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 800px) { .card-body { grid-template-columns: 1fr; } }
+
+        .section-title { font-size: 0.9em; text-transform: uppercase; color: #888; margin-bottom: 10px; font-weight: bold; display: block; border-bottom: 1px solid #333; padding-bottom: 5px; }
         
-        .dosage-info { background: #121212; padding: 10px; border-radius: 5px; border: 1px solid #333; margin-top: 15px; font-size: 0.9em; }
-        .badge { padding: 3px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; margin-right: 5px; text-transform: uppercase; }
-        .badge-med { background: #2c3e50; color: #3498db; }
-        .badge-dept { background: #333; color: #fff; }
+        .rp-box { background: #000; color: #00ff41; padding: 15px; border-radius: 5px; font-family: 'Courier New', monospace; font-size: 0.9em; border-left: 4px solid #00ff41; }
+        ul { padding-left: 20px; margin: 0; }
+        li { margin-bottom: 8px; }
+
+        .med-info { background: #222; padding: 15px; border-radius: 8px; border: 1px solid #444; }
+        .mg-tag { color: #ffcc00; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>LSMD Medical Dashboard</h1>
-    <input type="text" id="search" class="search-box" placeholder="Suchen nach: Chirurgie, Psychose, Medikament, Skalpell..." onkeyup="search()">
+    <div class="header">
+        <h1>LSMD | Medical Knowledge Base</h1>
+        <p>Zentrales Informationssystem für den medizinischen Dienst</p>
+    </div>
 
-    <div id="guide"></div>
+    <div class="search-container">
+        <input type="text" id="search" class="search-box" placeholder="Suchen nach Verletzung, Abteilung oder Symptom..." onkeyup="filter()">
+        <div class="filter-btns">
+            <button class="filter-btn active" data-type="all" onclick="setFilter('all')">Alle Bereiche</button>
+            <button class="filter-btn" data-type="emergency" onclick="setFilter('emergency')">Notdienst</button>
+            <button class="filter-btn" data-type="surgery" onclick="setFilter('surgery')">Chirurgie</button>
+            <button class="filter-btn" data-type="psych" onclick="setFilter('psych')">Psychotherapie</button>
+        </div>
+    </div>
+
+    <div id="guide-list"></div>
 </div>
 
 <script>
-    const data = [
+    const database = [
+        // --- NOTDIENST ---
+        {
+            id: "E1", title: "Offene Fraktur (Bein/Arm)", type: "emergency",
+            keywords: "bruch knochen splitter blutung unfall",
+            steps: ["Wundreinigung mit Ringerlösung","Blutstillung (Druckverband oberhalb)","Ruhigstellung mit Vakuum-Schiene","Schmerzmittelgabe nach Anweisung"],
+            meds: "Analgetika (nach ärztlicher Verordnung)",
+            rp: "/me tastet vorsichtig die Bruchstelle ab\n/me desinfiziert die Wunde weitläufig\n/me fixiert die Schiene mit Klettverschlüssen",
+            note: "Patient darf Extremität keinesfalls belasten. Infektionsgefahr!"
+        },
+        {
+            id: "E2", title: "Herzinfarkt (Myokardinfarkt)", type: "emergency",
+            keywords: "herz brust schmerz atemnot",
+            steps: ["Oberkörper hochlagern","Sauerstoffzufuhr (6-10L/Min)","EKG-Monitoring","Nitrospray & Blutverdünner"],
+            meds: "Nitroglycerin & Thrombozytenaggregationshemmer (nach Protokoll)",
+            rp: "/me öffnet die Kleidung am Oberkörper\n/me klebt EKG-Elektroden auf\n/me reicht dem Patienten das Spray",
+            note: "Absolute Ruhe bewahren. Stress für Patienten lebensgefährlich."
+        },
+
         // --- CHIRURGIE ---
         {
-            title: "Operative Kugelentfernung (Torax)",
-            dept: "Chirurgie",
-            type: "surgery",
-            keywords: "chirurgie kugel op narkose skalpell",
-            steps: [
-                "Einleitung der Vollnarkose nach Narkoseprotokoll",
-                "Großflächige Desinfektion des OP-Feldes",
-                "Inzision mit Skalpell",
-                "Blutstillung mittels Kauterisation",
-                "Extraktion des Projektils",
-                "Wundverschluss (Naht)"
-            ],
-            meds: "Antibiotikaprophylaxe, Postoperative Schmerztherapie",
-            dosage: "Schmerzmanagement nach ärztlicher Anordnung."
+            id: "C1", title: "Projektilextraktion (OP)", type: "surgery",
+            keywords: "schuss op chirurgie kugel blutung skalpell",
+            steps: ["Vollnarkose einleiten","Schnittführung mit Skalpell","Blutgefäße veröden (Kauter)","Projektil mit Kornzange bergen","Mehrschichtige Naht"],
+            meds: "Anästhetika, Antibiotika",
+            rp: "/me setzt das Skalpell an und schneidet\n/me tupft austretendes Blut ab\n/me zieht das Projektil aus dem Gewebe\n/me setzt die Hautnaht (Einzelknopfnaht)",
+            note: "OP-Dauer ca. 45-60 Min. Danach Bettruhe."
         },
+        {
+            id: "C2", title: "Innere Blutungen (Milz/Leber)", type: "surgery",
+            keywords: "unfall bauch innerlich op blut",
+            steps: ["Laparotomie (Bauchöffnung)","Absaugen des Blutes","Lokalisierung der Blutungsquelle","Clip oder Naht am Gefäß","Drainage legen"],
+            meds: "Gerinnungsfördernde Mittel",
+            rp: "/me führt den Sauger in den Bauchraum ein\n/me setzt eine Klemme auf das Gefäß\n/me spült den Bauchraum mit Kochsalzlösung",
+            note: "Extrem zeitkritisch! Schockgefahr."
+        },
+
         // --- PSYCHOTHERAPIE ---
         {
-            title: "Akute Psychotische Episode",
-            dept: "Psychotherapie",
-            type: "therapy",
-            keywords: "psychose therapie wahn stimmen angst",
-            steps: [
-                "Deeskalierendes Gespräch (ruhige Umgebung)",
-                "Realitätsprüfung (vorsichtiges Hinterfragen der Wahninhalte)",
-                "Medikamentöse Akutintervention",
-                "Gefährdungsbeurteilung (Eigen- / Fremdgefährdung)",
-                "Einleitung einer stationären Langzeittherapie"
-            ],
-            meds: "Antipsychotika (z.B. Olanzapin oder Risperidon)",
-            dosage: "Medikamentöse Einstellung erfolgt individuell durch den Psychiater."
+            id: "P1", title: "Panikattacke (Akut)", type: "psych",
+            keywords: "angst panik atem psychotherapie",
+            steps: ["Patient aus Gefahrenzone bringen","Atemtechnik anleiten","Reize minimieren (Licht/Lärm)","Grounding-Technik (5 Dinge sehen...)"],
+            meds: "Anxiolytika (bei Bedarf)",
+            rp: "/me spricht mit ruhiger, tiefer Stimme\n/me hält Blickkontakt zum Patienten\n/me demonstriert die richtige Atmung",
+            note: "Niemals sagen 'Beruhigen Sie sich einfach'. Verständnis zeigen."
         },
         {
-            title: "Generalisierte Angststörung",
-            dept: "Psychotherapie",
-            type: "therapy",
-            keywords: "angst panik therapie depression",
-            steps: [
-                "Anamneseerhebung (Trigger-Identifikation)",
-                "Kognitive Umstrukturierung",
-                "Atemtechniken zur Akutbewältigung",
-                "Einstellung auf SSRI-Medikation"
-            ],
-            meds: "Venlafaxin oder Escitalopram",
-            dosage: "Dosierung wird individuell angepasst."
+            id: "P2", title: "Schwere Depression / Suizidalität", type: "psych",
+            keywords: "traurig tod suizid psychose therapie",
+            steps: ["Vertrauensbasis aufbauen","Krisenplan erstellen","Gefährdungseinschätzung","Einweisung in geschlossene Abteilung?"],
+            meds: "Antidepressiva (nach Verschreibung)",
+            rp: "/me hört aktiv zu und macht sich Notizen\n/me stellt offene Fragen zur Gefühlswelt\n/me bietet ein Glas Wasser und Taschentücher an",
+            note: "Keine Vorwürfe machen. Patient ernst nehmen."
         }
     ];
 
+    let currentFilter = 'all';
+
     function build() {
-        const container = document.getElementById('guide');
-        data.forEach((item, i) => {
-            container.innerHTML += `
-                <div class="guide-card ${item.type}" data-key="${item.keywords} ${item.dept.toLowerCase()}">
+        const list = document.getElementById('guide-list');
+        list.innerHTML = "";
+        database.forEach(item => {
+            list.innerHTML += `
+                <div class="guide-card ${item.type}" data-type="${item.type}" data-search="${item.keywords} ${item.title.toLowerCase()}">
                     <div class="card-header">
                         <span>${item.title}</span>
-                        <span class="badge badge-dept">${item.dept}</span>
+                        <small style="font-size: 0.6em; opacity: 0.7;">ID: ${item.id}</small>
                     </div>
                     <div class="card-body">
-                        <ul>${item.steps.map(s => `<li>${s}</li>`).join('')}</ul>
-                        <div class="dosage-info">
-                            <span class="badge badge-med">Medikation: ${item.meds}</span><br>
-                            <small><strong>Hinweis:</strong> ${item.dosage}</small>
+                        <div>
+                            <span class="section-title">Behandlungsablauf</span>
+                            <ul>${item.steps.map(s => `<li>${s}</li>`).join('')}</ul>
+                        </div>
+                        <div>
+                            <span class="section-title">Medikation & Hinweise</span>
+                            <div class="med-info">
+                                💊 <strong>Substanzen:</strong> ${item.meds}<br>
+                                ⚠️ <small>${item.note}</small>
+                            </div>
+                        </div>
+                        <div style="grid-column: 1 / -1;">
+                            <span class="section-title">RP-Befehle (/me /do)</span>
+                            <div class="rp-box">${item.rp.replace(/\n/g, '<br>')}</div>
                         </div>
                     </div>
                 </div>`;
         });
     }
 
-    function search() {
-        let input = document.getElementById('search').value.toLowerCase();
+    function setFilter(type) {
+        currentFilter = type;
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.type === type);
+        });
+        filter();
+    }
+
+    function filter() {
+        let query = document.getElementById('search').value.toLowerCase();
         let cards = document.getElementsByClassName('guide-card');
-        Array.from(cards).forEach(c => {
-            c.style.display = (input.length > 1 && c.dataset.key.includes(input)) ? "block" : "none";
+        
+        Array.from(cards).forEach(card => {
+            let matchSearch = card.dataset.search.includes(query);
+            let matchType = (currentFilter === 'all' || card.dataset.type === currentFilter);
+            
+            if (matchSearch && matchType && query.length > 1) {
+                card.style.display = "block";
+            } else if (query.length <= 1 && matchType && currentFilter !== 'all') {
+                card.style.display = "block"; // Zeige alle der Kategorie wenn Suche leer
+            } else {
+                card.style.display = "none";
+            }
         });
     }
 
     build();
 </script>
+
 </body>
 </html>
